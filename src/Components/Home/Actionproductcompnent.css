@@ -1,0 +1,10 @@
+*{
+    margin: 0%;
+    padding: 0%;
+}
+.actionCard{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+}
