@@ -4,9 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../Pages/Home";
 import Login from "../Pages/Login";
 import Rigister from "../Pages/Rigister";
-import Addproduct from "../Components/Home/addproduct";
-import Actionproductcompnent from "../Components/Home/Actionproductcompnent";
-import UpcommingAction from "../Components/Home/UpcommingAction";
+import   Biddies from "../Pages/Biddies";
+import Conformbiddes from "../Pages/conformBiddes";
+import Protactiveroutes from './Protectiveroutes'
+
 
 const Approutes = () => {
   return (
@@ -15,14 +16,13 @@ const Approutes = () => {
         <Bar />
         <Routes>
           <Route element={<Login />} path="/" />
-          {/* <Route element={<Protactiveroutes />} > */}
           <Route element={<Rigister />} out path="/Rigister" />
+          <Route element={<Protactiveroutes />} >
           <Route element={<Home />} out path="/home" />
-          <Route element={<Addproduct />} out path="/addProduct" />
-          <Route element={<Addproduct />} out path="/addProduct" />
-          <Route element={<Actionproductcompnent />} out path="/actionproductcompnent" />
-          <Route element={<UpcommingAction />} out path="/upcommingAction" />
-          {/* </Route> */}
+          <Route element={<Biddies />} out path="/biddies" />
+          <Route element={<Conformbiddes />} out path="/Conformbiddes" />
+          {/* <Route path="*" element={<Navigate to="/" />} /> */}
+          </Route>
         </Routes>
       </Router>
     </>

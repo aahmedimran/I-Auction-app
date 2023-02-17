@@ -13,6 +13,8 @@ export const Userauth = (email, password) => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        console.log("🚀 ~ file: action.js:16 ~ .then ~ user", user);
+        localStorage.setItem("User", user.uid);
         dispatch({
           type: ActionTypes.Login_User_SUCCESS,
           payload: user,
@@ -50,7 +52,7 @@ export const Usercreate = (firstName, lastName, email, password) => {
         }
       })
       .catch((error) => {
-        console.log("error api call", error)
+        console.log("error api call", error);
 
         dispatch({
           type: ActionTypes.Login_User_FAIL,

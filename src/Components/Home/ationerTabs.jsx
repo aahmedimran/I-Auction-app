@@ -12,9 +12,6 @@ const AtionerTabs = () => {
 <Tabs
         defaultActiveKey="home"
         id="uncontrolled-tab-example">
-        {/* <Tab eventKey="home" title="Addproduct"  className="col-6 color-red">
-          <Addproduct/>
-          </Tab> */}
         <Tab eventKey="Actionproduct" title="Actionproduct">
           <Actionproduct />
         </Tab>

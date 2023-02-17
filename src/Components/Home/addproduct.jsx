@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-
-import { useDispatch,useSelector } from "react-redux";
-import { Auction } from "../../store/Auction product/action";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { Auction, getAuction } from "../../store/Auction product/action";
 
 const Addproduct = () => {
   // const [open, setOpen] = useState(false);
@@ -19,20 +19,24 @@ const Addproduct = () => {
     price: "",
     discription: "",
   });
- 
-  const { data } = useSelector((state) => state.addAuction);
-  
+const User = localStorage.getItem("User")
+  const {data} = useSelector((state) => state.addAuction);
+  // const {data:authData} = useSelector((state) => state.Login);
+  // console.log("🚀 ~ file: addproduct.jsx:25 ~ Addproduct ~ Login", authData)
 
   const dispatch = useDispatch();
   React.useEffect(() => {
     if (data) {
-      setShow(false);
       setInputValue({ Name: "", price: "", discription: "" });
-      setSelectedValue('')
+      setSelectedValue("");
+      toast.success("Auction Added Now");
+      setShow(false);
     }
-  }, [data])
-  
- 
+    dispatch(getAuction());
+
+  }, [data, dispatch]);
+
+
   const ChangeInputValue = (event) => {
     let Value = { ...inputValue };
     Value[event.target.name] = event.target.value;
@@ -42,35 +46,31 @@ const Addproduct = () => {
   const handleAdd = () => {
     const { Name, price, discription } = inputValue;
     if (!Name) {
-      console.log("🚀 ~ Return price");
-   
+      toast.error("enter Name");
       return;
     }
     if (!price) {
-      
-      console.log("🚀 ~ Return price");
+      toast.error("enter Price");
       return;
     }
     if (!discription) {
-      console.log("🚀 ~ Return discription");
+      toast.error("enter discription");
       return;
     }
-
-    if (imageUpload == null) {
-      console.log("🚀 ~ Return imageUpload");
+    if (!imageUpload) {
+      toast.error("imageUpload");
       return;
     }
-    dispatch(Auction(Name, price, discription, selectedValue, imageUpload));
+    if (!selectedValue) {
+      toast.error("select Auction Type ");
+      return;
+    }
+    dispatch(Auction(Name, price, discription, selectedValue, imageUpload,User));
   };
-
-
-
-
-
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        ++
+        Add Auction
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Form onSubmit={handleAdd}>
@@ -88,7 +88,7 @@ const Addproduct = () => {
                 onChange={ChangeInputValue}
               />
             </Form.Group>
-          
+
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Auction Price</Form.Label>
               <Form.Control
@@ -99,7 +99,7 @@ const Addproduct = () => {
                 onChange={ChangeInputValue}
               />
             </Form.Group>
-          
+
             <FloatingLabel
               controlId="floatingTextarea"
               label="Description"
