@@ -7,10 +7,11 @@
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
-
-.discription{
-    height:5.5vh ;
+.item{
     text-align: start;
+}
+.discription{
+    height:6.1vh;
     line-height: 18px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -20,4 +21,19 @@
 .button-container{
 display: flex;
 justify-content: space-between;
+}
+.Actionproductcompnent-main-contanier{
+width: 100%;
+display: flex;
+    justify-content: center;
+}
+.Actionproductcompnent-main-contanier-child{
+    display: flex;
+    justify-content: space-between;
+    width: 80vh;
+}
+.Actionproductcompnent-main-contanier-child>select{
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
 }

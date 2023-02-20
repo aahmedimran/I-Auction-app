@@ -29,7 +29,7 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
   const dispatch = useDispatch();
 
   const handleAdd = () => {
-    dispatch(createBid(id, Name, discription, price, file, type));
+    dispatch(createBid(id, auctionPrice));
     toast.success("Bid Created");
     setShow(false);
   };

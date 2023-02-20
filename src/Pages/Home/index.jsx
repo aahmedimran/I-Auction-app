@@ -1,10 +1,10 @@
 import React from 'react'
-import TabsComponent from '../../Components/Home/tabsComponent'
+import Actionproductcompnent from '../../Components/Home/Actionproductcompnent'
 
 const Home = () => {
   return (
    <>
-   <TabsComponent/>
+   <Actionproductcompnent />
    </>
   )
 }

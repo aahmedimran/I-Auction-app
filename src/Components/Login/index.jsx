@@ -12,10 +12,22 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import {Userauth} from '../../store/Auth/action'
+import { useNavigate } from "react-router";
+import { useEffect } from 'react';
 
 function Copyright(props) {
+  const  data  = useSelector((state) => state.Userauth);
+  console.log("🚀 ~ file: index.jsx:21 ~ Copyright ~ data", data)
+  const User = localStorage.getItem("User")
+  const navigate = useNavigate()
+useEffect(() => {
+ if(User){
+  navigate("/Home")
+ }
+}, [User, navigate])
+
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}

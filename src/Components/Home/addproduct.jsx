@@ -8,34 +8,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { Auction, getAuction } from "../../store/Auction product/action";
 
 const Addproduct = () => {
-  // const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [selectedValue, setSelectedValue] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
+  const [selactedCategaryValue, setSelactedCategaryValue] = useState("Electrical");
+
   const [inputValue, setInputValue] = useState({
     Name: "",
     price: "",
     discription: "",
   });
-const User = localStorage.getItem("User")
-  const {data} = useSelector((state) => state.addAuction);
-  // const {data:authData} = useSelector((state) => state.Login);
-  // console.log("🚀 ~ file: addproduct.jsx:25 ~ Addproduct ~ Login", authData)
-
+  const User = localStorage.getItem("User");
+  const { data } = useSelector((state) => state.addAuction);
   const dispatch = useDispatch();
   React.useEffect(() => {
     if (data) {
       setInputValue({ Name: "", price: "", discription: "" });
       setSelectedValue("");
+      setSelactedCategaryValue("");
       toast.success("Auction Added Now");
       setShow(false);
     }
     dispatch(getAuction());
-
   }, [data, dispatch]);
-
 
   const ChangeInputValue = (event) => {
     let Value = { ...inputValue };
@@ -57,6 +54,12 @@ const User = localStorage.getItem("User")
       toast.error("enter discription");
       return;
     }
+
+    if (!selactedCategaryValue) {
+      toast.error("Select Categary");
+      return;
+    }
+
     if (!imageUpload) {
       toast.error("imageUpload");
       return;
@@ -65,7 +68,9 @@ const User = localStorage.getItem("User")
       toast.error("select Auction Type ");
       return;
     }
-    dispatch(Auction(Name, price, discription, selectedValue, imageUpload,User));
+    dispatch(
+      Auction(Name, price, discription, selectedValue, imageUpload, User,selactedCategaryValue)
+    );
   };
   return (
     <>
@@ -113,6 +118,29 @@ const User = localStorage.getItem("User")
                 onChange={ChangeInputValue}
               />
             </FloatingLabel>
+
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Categary</Form.Label>
+              <select
+                name="select1"
+                id="select1"
+                value={selactedCategaryValue}
+                onChange={(e) => setSelactedCategaryValue(e.target.value)}
+              >
+                <option value={"Electrical"}>Electrical</option>
+                <option value={"Electronics"}>Electronics</option>
+              </select>
+            </Form.Group>
+
+            {/* <select
+            name="select1"
+            id="select1"
+            value=''
+            // onChange={(e) => setSelactedCategaryValue(e.target.value)}
+          >
+            <option value={"Electrical"}>Electrical</option>
+            <option value={"Electronics"}>Electrical</option>
+          </select> */}
 
             <Form.Group controlId="formFileLg" className="mb-3"></Form.Group>
             <input

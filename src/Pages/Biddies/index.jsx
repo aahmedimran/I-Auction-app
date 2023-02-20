@@ -1,10 +1,10 @@
 import React from 'react'
-import Biddiescomponent from '../../Components/Biddies/Biddiescomponent'
+import Bidertabscomponent from '../../Components/Biddies/Bidertabscomponent'
 
 const Biddies = () => {
   return (
     <div>
-      <Biddiescomponent/>
+      <Bidertabscomponent/>
       Biddies</div>
   )
 }

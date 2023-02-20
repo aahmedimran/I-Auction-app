@@ -5,7 +5,8 @@ import {
   getDocs,
   doc,
   updateDoc,
-  deleteDoc 
+  deleteDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -16,8 +17,10 @@ export const Auction = (
   discription,
   selectedValue,
   imageUpload,
-  id
+  id,
+  Categary
 ) => {
+  console.log("🚀 ~ file: action.js:23 ~ Categary", Categary)
   return (dispatch) => {
     dispatch({
       type: ActionTypes.Auction_Create_LOADING,
@@ -36,8 +39,10 @@ export const Auction = (
               discription: discription,
               type: selectedValue,
               file: url,
-              userId:id,
+              userId: id,
+              Categary:Categary,
               isBid: false,
+              confirmBid: false,
             });
 
             dispatch({
@@ -83,20 +88,18 @@ export const getAuction = () => {
   };
 };
 
-
 export const deleteAuction = (id) => {
-  console.log("🚀 ~ file: action.js:90 ~ deleteAuction ~ id", id)
+  console.log("🚀 ~ file: action.js:90 ~ deleteAuction ~ id", id);
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.delete_Auction_LOADING,
     });
     try {
-      const docRef = await doc(db, "auctionItems",id)
-    deleteDoc(docRef)
-    console.log("deleteAuction");
+      const docRef = await doc(db, "auctionItems", id);
+      deleteDoc(docRef);
+      console.log("deleteAuction");
       dispatch({
         type: ActionTypes.delete_Auction_SUCCESS,
-       
       });
     } catch (e) {
       console.log(e, "error");
@@ -107,17 +110,30 @@ export const deleteAuction = (id) => {
   };
 };
 
-export const createBid = (id) => {
+export const createBid = (id, price) => {
+  console.log("🚀 ~ file: action.js:109 ~ createBid ~ price", price);
+
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.Bid_Create_LOADING,
     });
     try {
       const docRef = doc(db, "auctionItems", id);
-      await updateDoc(docRef, {
-        isBid: true,
-      });
-
+      // await updateDoc(docRef, {
+      //   isBid: true,
+      //   bidder: [...{ bidderId: localStorage.getItem("User"), bidPrice: price }],
+      // });
+      // Update the document with the new data and merge with existing data
+      // const docRef = db.collection("auctionItems").doc("myDocument");
+      const data = {isBid: true,
+        bidderId: localStorage.getItem("User"),
+        bidPrice: price}
+        setDoc(docRef,data, { merge: true })
+      // await docRef.setDoc({
+      //   isBid: true,
+      //   bidderId: localStorage.getItem("User"),
+      //   bidPrice: price,
+      // });
       dispatch({
         type: ActionTypes.Bid_Create_SUCCESS,
       });
