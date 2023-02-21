@@ -2,7 +2,7 @@ import ActionTypes from "./actionTypes";
 import { auth, db } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc,getDoc } from "firebase/firestore";
 
 export const Userauth = (email, password) => {
   return (dispatch) => {
@@ -37,13 +37,12 @@ export const Usercreate = (firstName, lastName, email, password) => {
       .then(async (userCredential) => {
         // Signed Up
         const user = userCredential.user;
-        console.log("🚀 ~ file: index.jsx:58 ~ .then ~ user", user);
         console.log("🚀 ~ file: index.jsx:58 ~ .then ~ user", user.uid);
         dispatch({
           type: ActionTypes.Login_User_SUCCESS,
         });
         try {
-          const docRef = await setDoc(doc(db, "users", user.uid), { // eslint-disable-line
+          const docRef = await setDoc(doc(db, "users", user.uid), {// eslint-disable-line
             firstName: firstName,
             lastName: lastName,
           });
@@ -58,5 +57,26 @@ export const Usercreate = (firstName, lastName, email, password) => {
           type: ActionTypes.Login_User_FAIL,
         });
       });
+  };
+};
+
+export const getUser = (id) => {
+  return async (dispatch) => {
+    dispatch({
+      type: ActionTypes.Get_User_LOADING,
+    });
+    try {
+      const docRef = doc(db, "users", id);
+      const auctionDetail = await getDoc(docRef);
+      dispatch({
+        type: ActionTypes.Get_User_SUCCESS,
+        payload:auctionDetail.data()
+      });
+    } catch {
+      console.log("e");
+      dispatch({
+        type: ActionTypes.Get_User_FAIL,
+      });
+    }
   };
 };

@@ -5,10 +5,12 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Card from "react-bootstrap/Card";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBid } from "../../store/Auction product/action";
 
 const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
+  const { data } = useSelector((state) => state.Getuser);
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -26,12 +28,19 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
     setImageUpload(file);
   }, [Name, discription, file, price, type]);
 
-  const dispatch = useDispatch();
-
   const handleAdd = () => {
-    dispatch(createBid(id, auctionPrice));
-    toast.success("Bid Created");
-    setShow(false);
+    if (parseInt(auctionPrice) >= parseInt(price / 10) + parseInt(price)) {
+      dispatch(createBid(id, auctionPrice, data.firstName));
+      toast.success("Bid Created");
+      setAuctionName("");
+      setAuctionPrice("");
+      setAuctionDescription("");
+      setAuctionType("");
+      setImageUpload("");
+      setShow(false);
+    } else {
+      toast.error("bid price must be 10%");
+    }
   };
   return (
     <>
@@ -62,7 +71,7 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
                 placeholder="Auction Price"
                 name="price"
                 value={auctionPrice}
-                onChange={(e) => setAuctionPrice(e.target.value)}
+                onChange={(e) => setAuctionPrice(parseInt(e.target.value))}
               />
             </Form.Group>
 

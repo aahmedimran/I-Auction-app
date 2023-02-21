@@ -5,6 +5,7 @@ const Biddies = () => {
   return (
     <div>
       <Bidertabscomponent/>
+
       Biddies</div>
   )
 }

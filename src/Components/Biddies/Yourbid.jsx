@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { getAuction } from "../../store/Auction product/action";
+import { deleteBid, getAuction } from "../../store/Auction product/action";
 const Yourbid = () => {
   const { data } = useSelector((state) => state.getAuction);
 
@@ -19,7 +19,9 @@ const Yourbid = () => {
         data?.map(
           (datas, index) =>
             datas?.product?.isBid === true &&
-            datas?.product?.bidderId === User && (
+            datas?.product?.bidder
+              .map((bidderData) => bidderData.bidderId)
+              .includes(User) && (
               <Card
                 style={{
                   width: "18rem",
@@ -46,16 +48,27 @@ const Yourbid = () => {
                     <div>
                       <Card.Title>Name : {datas?.product?.Name}</Card.Title>
                     </div>
+                    {/* <div>
+                      <Card.Title>
+                        bidderIds : {datas?.product?.bidder.map((bidderId)=><p>{bidderId.bidderId}</p>)}/Rs
+                      </Card.Title>
+                    </div> */}
                     <div>
-                      <Card.Title>bidPrice : {datas?.product?.bidPrice}/Rs</Card.Title>
+                      <Card.Title>
+                        bidPrice : {datas?.product?.price}/Rs
+                      </Card.Title>
                     </div>
                   </div>
                   <Card.Text className="discription">
                     <strong>Discription :</strong> {datas?.product?.discription}
                   </Card.Text>
                   <div className="button-container">
-                    <Button variant="primary"> Cancel bid</Button>
-
+                    <Button
+                      variant="primary"
+                      onClick={() => dispatch(deleteBid(datas?.id))}>
+                      {" "}
+                      Cancel bid
+                    </Button>
                   </div>
                 </Card.Body>
               </Card>

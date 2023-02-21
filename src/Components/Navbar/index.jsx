@@ -3,10 +3,20 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { LinkContainer } from "react-router-bootstrap";
+import { useNavigate } from "react-router";
 
 const Bar = () => {
+  const navigate = useNavigate();
+
   const User = localStorage.getItem("User");
-  console.log("🚀 ~ file: index.jsx:9 ~ Bar ~ User", User);
+
+  const logoutHandler = () => {
+    localStorage.removeItem("User");
+    if (!User) {
+      navigate("/Login");
+    }
+  };
+
   return (
     <Navbar bg="light" expand="lg" sticky="top">
       <Container>
@@ -16,7 +26,7 @@ const Bar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            {User  && (
+            {User && (
               <>
                 <LinkContainer to="/Home">
                   <Nav.Link>Home</Nav.Link>
@@ -27,15 +37,12 @@ const Bar = () => {
                 <LinkContainer to="/Conformbiddes">
                   <Nav.Link>ConformBiddes</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/" >
-
-                  <Nav.Link onClick={()=>( localStorage.removeItem('User'))}>Logout
-                 
-                  </Nav.Link>
+                <LinkContainer to="/">
+                  <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
                 </LinkContainer>
               </>
-            )} 
-            {!User  &&  (
+            )}
+            {!User && (
               <>
                 <LinkContainer to="/">
                   <Nav.Link>Login</Nav.Link>

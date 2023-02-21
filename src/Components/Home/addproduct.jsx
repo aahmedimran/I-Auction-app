@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Auction, getAuction } from "../../store/Auction product/action";
+import { Auction } from "../../store/Auction product/action";
 
 const Addproduct = () => {
   const [show, setShow] = useState(false);
@@ -13,7 +13,8 @@ const Addproduct = () => {
   const handleShow = () => setShow(true);
   const [selectedValue, setSelectedValue] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
-  const [selactedCategaryValue, setSelactedCategaryValue] = useState("Electrical");
+  const [selactedCategaryValue, setSelactedCategaryValue] =
+    useState("Electrical");
 
   const [inputValue, setInputValue] = useState({
     Name: "",
@@ -22,6 +23,7 @@ const Addproduct = () => {
   });
   const User = localStorage.getItem("User");
   const { data } = useSelector((state) => state.addAuction);
+
   const dispatch = useDispatch();
   React.useEffect(() => {
     if (data) {
@@ -31,7 +33,6 @@ const Addproduct = () => {
       toast.success("Auction Added Now");
       setShow(false);
     }
-    dispatch(getAuction());
   }, [data, dispatch]);
 
   const ChangeInputValue = (event) => {
@@ -69,7 +70,15 @@ const Addproduct = () => {
       return;
     }
     dispatch(
-      Auction(Name, price, discription, selectedValue, imageUpload, User,selactedCategaryValue)
+      Auction(
+        Name,
+        price,
+        discription,
+        selectedValue,
+        imageUpload,
+        User,
+        selactedCategaryValue
+      )
     );
   };
   return (
