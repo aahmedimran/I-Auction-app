@@ -109,8 +109,8 @@ export const getAuction = () => {
 };
 
 
-export const updateAuction = (id,Name,price,description,tyoe) => {
-  console.log("🚀 ~ file: action.js:113 ~ updateAuction ~ id,Name,price,description,tyoe:", id,Name,price,description,tyoe)
+export const updateAuction = (id,Name,price,description,type) => {
+  console.log("🚀 ~ file: action.js:113 ~ updateAuction ~ id,Name,price,description,tyoe:", id,Name,price,description,type)
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.Bid_Create_LOADING,
@@ -118,7 +118,7 @@ export const updateAuction = (id,Name,price,description,tyoe) => {
     try {
       const docRef = doc(db, "auctionItems", id);
        await updateDoc(docRef, {
-        price
+        Name,price,description,type
       });
       toast.success("Auction Updated");
       dispatch({
