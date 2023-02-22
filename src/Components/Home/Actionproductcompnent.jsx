@@ -156,7 +156,7 @@ const Actionproductcompnent = () => {
                           }}
                         >
                           {" "}
-                          Deleate Auction
+                          Delate  Auction
                         </Button>
                       ) : datas?.product?.bidder
                           .map((bidderData) => bidderData.bidderId)

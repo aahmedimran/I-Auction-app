@@ -12,9 +12,21 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Usercreate } from "../../store/Auth/action";
+import { useNavigate } from "react-router";
 function Copyright(props) {
+  const navigate = useNavigate();
+  const { dataLoading } = useSelector((state) => state.Signup);
+  const User = localStorage.getItem("User");
+  if (!dataLoading) {
+    navigate("/");
+  }
+  React.useEffect(() => {
+    if (User) {
+      navigate("/Home");
+    }
+  }, [User, navigate]);
   return (
     <Typography
       variant="body2"
@@ -23,8 +35,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+      I-Auction app
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -135,7 +147,7 @@ export default function Rigistercomponent() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

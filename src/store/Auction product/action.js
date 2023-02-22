@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { toast } from "react-toastify";
 
 export const Auction = (
   Name,
@@ -46,7 +47,7 @@ export const Auction = (
               confirmBid: false,
               bidder: [],
             });
-
+            toast.success("Auction Added");
             dispatch({
               type: ActionTypes.Auction_Create_SUCCESS,
               payload: docRef.id,
@@ -66,27 +67,27 @@ export const Auction = (
 };
 
 export const getAuction = () => {
-  return  (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: ActionTypes.Auction_Create_LOADING,
     });
     try {
-      const docRef =  collection(db, "auctionItems");
+      const docRef = collection(db, "auctionItems");
       onSnapshot(docRef, (querySnapshot) => {
         const auctionItem = [];
         querySnapshot.forEach((doc) => {
           auctionItem.push({ id: doc.id, product: doc.data() });
         });
         dispatch({
-              type: ActionTypes.Auction_Get_SUCCESS,
-              payload: [...auctionItem],
-            });
+          type: ActionTypes.Auction_Get_SUCCESS,
+          payload: [...auctionItem],
+        });
       });
     } catch (e) {
       console.log(e, "Error In Api Call GetAuction");
-        dispatch({
-          type: ActionTypes.Auction_Get_FAIL,
-        });
+      dispatch({
+        type: ActionTypes.Auction_Get_FAIL,
+      });
     }
     // try {
     //   const querySnapshot = await getDocs(collection(db, "auctionItems"));
@@ -115,7 +116,9 @@ export const deleteAuction = (id) => {
     try {
       const docRef = await doc(db, "auctionItems", id);
       deleteDoc(docRef);
-      console.log("deleteAuction");
+      console.log("Delete Auction Success");
+      toast.success("Auction Deleted");
+
       dispatch({
         type: ActionTypes.delete_Auction_SUCCESS,
       });
@@ -128,7 +131,7 @@ export const deleteAuction = (id) => {
   };
 };
 
-export const createBid = (id, price, Name) => {
+export const createBid = (id, price) => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.Bid_Create_LOADING,
@@ -136,7 +139,6 @@ export const createBid = (id, price, Name) => {
     try {
       const docRef = doc(db, "auctionItems", id);
       const auctionDetail = await getDoc(docRef);
-      console.log(auctionDetail.data(), "auctionDetail");
       await setDoc(
         docRef,
         {
@@ -145,19 +147,18 @@ export const createBid = (id, price, Name) => {
             ...auctionDetail.data().bidder,
             {
               bidderId: localStorage.getItem("User"),
-              bidderName: Name,
+              bidderName: localStorage.getItem("Profile"),
               bidPrice: price,
             },
           ],
         },
         { merge: true }
       );
+      toast.success("Bid Created");
       dispatch({
         type: ActionTypes.Bid_Create_SUCCESS,
       });
     } catch (e) {
-      console.log(e, "Error In Api Call Bid_Create");
-
       dispatch({
         type: ActionTypes.Bid_Create_FAIL,
       });
@@ -173,7 +174,6 @@ export const deleteBid = (id) => {
     try {
       const docRef = doc(db, "auctionItems", id);
       const auctionDetail = await getDoc(docRef);
-      console.log(auctionDetail.data().bidder, "auctionDetail");
       const temp = [...auctionDetail.data().bidder];
       const updatedBidder = temp.filter(
         (bid) => bid.bidderId !== localStorage.getItem("User")
@@ -182,6 +182,7 @@ export const deleteBid = (id) => {
         isBid: false,
         bidder: updatedBidder,
       });
+      toast.success("Bid Canceled");
       dispatch({
         type: ActionTypes.Cancel_Bid_SUCCESS,
       });

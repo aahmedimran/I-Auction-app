@@ -30,7 +30,6 @@ const Addproduct = () => {
       setInputValue({ Name: "", price: "", discription: "" });
       setSelectedValue("");
       setSelactedCategaryValue("");
-      toast.success("Auction Added Now");
       setShow(false);
     }
   }, [data, dispatch]);

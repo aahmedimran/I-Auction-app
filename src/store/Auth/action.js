@@ -2,25 +2,29 @@ import ActionTypes from "./actionTypes";
 import { auth, db } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc,getDoc } from "firebase/firestore";
-
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 export const Userauth = (email, password) => {
   return (dispatch) => {
     dispatch({
       type: ActionTypes.Login_User_LOADING,
     });
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then( async(userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log("🚀 ~ file: action.js:16 ~ .then ~ user", user);
         localStorage.setItem("User", user.uid);
+        const docRef = doc(db, "users", user.uid);
+        const auctionDetail = await getDoc(docRef);
+        localStorage.setItem("Profile", auctionDetail.data().firstName);
         dispatch({
           type: ActionTypes.Login_User_SUCCESS,
           payload: user,
         });
+        toast.success("Login Success");
       })
       .catch((error) => {
+        toast.error("Email Or password Incorrect");
         console.log("error", error);
         dispatch({
           type: ActionTypes.Login_User_FAIL,
@@ -39,44 +43,28 @@ export const Usercreate = (firstName, lastName, email, password) => {
         const user = userCredential.user;
         console.log("🚀 ~ file: index.jsx:58 ~ .then ~ user", user.uid);
         dispatch({
-          type: ActionTypes.Login_User_SUCCESS,
+          type: ActionTypes.User_Create_SUCCESS,
         });
         try {
-          const docRef = await setDoc(doc(db, "users", user.uid), {// eslint-disable-line
+          // eslint-disable-next-line
+          const docRef = await setDoc(doc(db, "users", user.uid), {
             firstName: firstName,
             lastName: lastName,
           });
+          toast.success("SignUp success");
         } catch (e) {
           console.error("Error adding document: ", e);
+          toast.error("SignUp error");
         }
       })
       .catch((error) => {
         console.log("error api call", error);
 
         dispatch({
-          type: ActionTypes.Login_User_FAIL,
+          type: ActionTypes.User_Create_FAIL,
         });
       });
   };
 };
 
-export const getUser = (id) => {
-  return async (dispatch) => {
-    dispatch({
-      type: ActionTypes.Get_User_LOADING,
-    });
-    try {
-      const docRef = doc(db, "users", id);
-      const auctionDetail = await getDoc(docRef);
-      dispatch({
-        type: ActionTypes.Get_User_SUCCESS,
-        payload:auctionDetail.data()
-      });
-    } catch {
-      console.log("e");
-      dispatch({
-        type: ActionTypes.Get_User_FAIL,
-      });
-    }
-  };
-};
+

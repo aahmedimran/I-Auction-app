@@ -5,11 +5,10 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Card from "react-bootstrap/Card";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createBid } from "../../store/Auction product/action";
 
 const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
-  const { data } = useSelector((state) => state.Getuser);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -30,8 +29,7 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
 
   const handleAdd = () => {
     if (parseInt(auctionPrice) >= parseInt(price / 10) + parseInt(price)) {
-      dispatch(createBid(id, auctionPrice, data.firstName));
-      toast.success("Bid Created");
+      dispatch(createBid(id, auctionPrice));
       setAuctionName("");
       setAuctionPrice("");
       setAuctionDescription("");
