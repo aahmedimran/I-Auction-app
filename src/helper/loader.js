@@ -6,12 +6,13 @@ const Loader = ({ loading }) => {
   return (
     <div className="loader">
       <HashLoader
-        color={"#13F513"}
+        color={"#0D6EFD"}
         loading={loading}
         size={60}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
+      I-Auction App
     </div>
   );
 };
