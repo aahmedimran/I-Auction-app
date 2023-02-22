@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Userauth } from "../../store/Auth/action";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 function Copyright(props) {
   const { data } = useSelector((state) => state.Login); // eslint-disable-line
   const User = localStorage.getItem("User");
@@ -34,7 +35,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="/">
-      I-Auction app
+        I-Auction app
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -47,7 +48,16 @@ const Logincomponent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const data = new FormData(e.currentTarget);
+    if (!data.get("email")) {
+      toast.error("Enter Email");
+      return;
+    }
+    if (!data.get("password")) {
+      toast.error("Enter password");
+      return;
+    }
     dispatch(Userauth(data.get("email"), data.get("password")));
   };
 
