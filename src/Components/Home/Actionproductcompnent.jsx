@@ -37,7 +37,6 @@ const Actionproductcompnent = () => {
         setFilterData(temp);
       }
       if (
-        
         selactedAuctionValue === "All auction" &&
         selactedCategaryValue === "Electrical"
       ) {
@@ -88,8 +87,8 @@ const Actionproductcompnent = () => {
         <Loader />
       ) : (
         <>
-          <div>
-            <div>
+          <div className="Actionproductcompnent-filterbar">
+            <div >
               <label htmlFor="">Categary</label>
               <select
                 name="select1"
@@ -101,6 +100,8 @@ const Actionproductcompnent = () => {
                 <option value={"Electrical"}>Electrical</option>
                 <option value={"Electronics"}>Electronics</option>
               </select>
+            </div>
+            <div>
               <label htmlFor="">Auction Types</label>
               <select
                 name="select1"
@@ -112,10 +113,12 @@ const Actionproductcompnent = () => {
                 <option value={"Currunt auction"}>Currunt auction</option>
                 <option value={"Up Comming auction"}>Up Comming auction</option>
               </select>
+            </div>
+            <div>
               <Addproduct />
-              
             </div>
           </div>
+
           <div className="actionCard">
             {filterData &&
               filterData.map((datas, index) => (

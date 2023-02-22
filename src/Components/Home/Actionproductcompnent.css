@@ -22,18 +22,15 @@
 display: flex;
 justify-content: space-between;
 }
-.Actionproductcompnent-main-contanier{
-width: 100%;
+.Actionproductcompnent-filterbar{
 display: flex;
-    justify-content: center;
+justify-content: space-evenly;
+margin-top: 20px;
 }
-.Actionproductcompnent-main-contanier-child{
-    display: flex;
-    justify-content: space-between;
-    width: 80vh;
-}
-.Actionproductcompnent-main-contanier-child>select{
+.Actionproductcompnent-filterbar>div>select{
     border: none;
+    width: 38vh;
+    border-bottom: 2px solid;
     outline: none;
-    border-bottom: 1px solid black;
+    margin-left: 10px;
 }
