@@ -6,9 +6,18 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Card from "react-bootstrap/Card";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { createBid } from "../../store/Auction product/action";
+import { createBid, updateAuction } from "../../store/Auction product/action";
 
-const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
+const Globalmodalcomponent = ({
+  title,
+  heading,
+  id,
+  Name,
+  discription,
+  price,
+  file,
+  type,
+}) => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -18,6 +27,14 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
   const [auctionDescription, setAuctionDescription] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
   const [auctionType, setAuctionType] = useState("");
+  console.log("🚀 ~ file: Bidmodalcomponent.jsx:30 ~ auctionType:", auctionType)
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const handleClick = () => {
+    if (title === "Update") {
+      setIsDisabled(false);
+    }
+  };
 
   useEffect(() => {
     setAuctionName(Name);
@@ -28,27 +45,43 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
   }, [Name, discription, file, price, type]);
 
   const handleAdd = () => {
-    if (parseInt(auctionPrice) >= parseInt(price / 10) + parseInt(price)) {
-      dispatch(createBid(id, auctionPrice));
-      setAuctionName("");
-      setAuctionPrice("");
-      setAuctionDescription("");
-      setAuctionType("");
-      setImageUpload("");
+    if (title === "Update") {
+      dispatch(updateAuction(id,auctionName,auctionPrice,auctionDescription,auctionType));
+      // setAuctionName("");
+      // setAuctionPrice("");
+      // setAuctionDescription("");
+      // setAuctionType("");
+      // setImageUpload("");
       setShow(false);
     } else {
-      toast.error("bid price must be 10%");
+      if (parseInt(auctionPrice) >= parseInt(price / 10) + parseInt(price)) {
+        dispatch(createBid(id, auctionPrice));
+        setAuctionName("");
+        setAuctionPrice("");
+        setAuctionDescription("");
+        setAuctionType("");
+        setImageUpload("");
+        setShow(false);
+      } else {
+        toast.error("bid price must be 10%");
+      }
     }
   };
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Bid Here
+      <Button
+        variant="primary"
+        onClick={(event) => {
+          handleShow(event);
+          handleClick(event);
+        }}
+      >
+        {title}
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Form onSubmit={handleAdd}>
           <Modal.Header closeButton>
-            <Modal.Title>Bid</Modal.Title>
+            <Modal.Title>{heading}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -58,10 +91,10 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
                 placeholder="Auction Product Name"
                 name="Name"
                 value={auctionName}
-                disabled
+                disabled={isDisabled}
+                onChange={(e) => setAuctionName(e.target.value)}
               />
             </Form.Group>
-
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Auction Price</Form.Label>
               <Form.Control
@@ -72,7 +105,6 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
                 onChange={(e) => setAuctionPrice(parseInt(e.target.value))}
               />
             </Form.Group>
-
             <FloatingLabel
               controlId="floatingTextarea"
               label="Description"
@@ -83,7 +115,8 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
                 placeholder="Add Description here"
                 name="discription"
                 value={auctionDescription}
-                disabled
+                disabled={isDisabled}
+                onChange={(e) => setAuctionDescription(e.target.value)}
               />
             </FloatingLabel>
             <Form.Group controlId="formFileLg" className="mb-3"></Form.Group>
@@ -93,7 +126,6 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
               width={171}
               height={180}
             />
-
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check
                 type="radio"
@@ -101,7 +133,8 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
                 name="auctionType"
                 value={auctionType}
                 checked={auctionType === "Currunt auction"}
-                disabled
+                disabled={isDisabled}
+                onChange={(e) => setAuctionType(e.target.value)}
               />
               <Form.Check
                 type="radio"
@@ -109,7 +142,8 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
                 name="auctionType"
                 value={auctionType}
                 checked={auctionType === "Up Comming auction"}
-                disabled
+                disabled={isDisabled}
+                onChange={(e) => setAuctionType(e.target.value)}
               />
             </Form.Group>
           </Modal.Body>
@@ -126,5 +160,4 @@ const Bidmodalcomponent = ({ id, Name, discription, price, file, type }) => {
     </>
   );
 };
-
-export default Bidmodalcomponent;
+export default Globalmodalcomponent;

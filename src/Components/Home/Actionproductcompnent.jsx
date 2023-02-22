@@ -9,27 +9,27 @@ import {
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import "./Actionproductcompnent.css";
-import Bidmodalcomponent from "./Bidmodalcomponent";
+import Bidmodalcomponent from "./Globalmodalcomponent";
 import Loader from "../../helper/loader";
 const Actionproductcompnent = () => {
   const { data } = useSelector((state) => state.getAuction);
-
   const dispatch = useDispatch();
   const User = localStorage.getItem("User");
-  useEffect(() => {
-    dispatch(getAuction());
-  }, []); // eslint-disable-line
   const [selactedAuctionValue, setSelactedAuctionValue] =
     useState("All auction");
   const [selactedCategaryValue, setSelactedCategaryValue] =
     useState("All Categary");
   const [filterData, setFilterData] = useState([]);
   const [loading, setloading] = useState(true);
+  useEffect(() => {
+    dispatch(getAuction());
+  }, []); // eslint-disable-line
+
   const filterdData = () => {
     if (data) {
       setloading(false);
       const temp = [...data];
-
+      // =====// Auction Filter
       if (
         selactedAuctionValue === "All auction" &&
         selactedCategaryValue === "All Categary"
@@ -37,6 +37,7 @@ const Actionproductcompnent = () => {
         setFilterData(temp);
       }
       if (
+        
         selactedAuctionValue === "All auction" &&
         selactedCategaryValue === "Electrical"
       ) {
@@ -55,7 +56,7 @@ const Actionproductcompnent = () => {
         );
         setFilterData(update);
       }
-      // ==================================================
+      // =====// Categary Filter
       if (
         selactedCategaryValue === "All Categary" &&
         selactedAuctionValue === "Currunt auction"
@@ -112,6 +113,7 @@ const Actionproductcompnent = () => {
                 <option value={"Up Comming auction"}>Up Comming auction</option>
               </select>
               <Addproduct />
+              
             </div>
           </div>
           <div className="actionCard">
@@ -149,26 +151,39 @@ const Actionproductcompnent = () => {
                     <div className="button-container">
                       {datas?.product?.userId ===
                       localStorage.getItem("User") ? (
-                        <Button
-                          variant="primary"
-                          onClick={() => {
-                            dispatch(deleteAuction(datas?.id));
-                          }}
-                        >
-                          {" "}
-                          Delate  Auction
-                        </Button>
+                        <>
+                          <Bidmodalcomponent
+                            title="Update"
+                            heading="Update Auction"
+                            id={datas?.id}
+                            Name={datas?.product?.Name}
+                            price={datas?.product?.price}
+                            discription={datas?.product?.discription}
+                            file={datas?.product?.file}
+                            type={datas?.product?.type}
+                          />
+                          <Button
+                            variant="danger"
+                            onClick={() => {
+                              dispatch(deleteAuction(datas?.id));
+                            }}
+                          >
+                            Delate
+                          </Button>
+                        </>
                       ) : datas?.product?.bidder
                           .map((bidderData) => bidderData.bidderId)
                           .includes(User) ? (
                         <Button
-                          variant="primary"
+                          variant="danger"
                           onClick={() => dispatch(deleteBid(datas?.id))}
                         >
                           Cancel bid
                         </Button>
                       ) : (
                         <Bidmodalcomponent
+                          title="Bid Here"
+                          heading="Bid"
                           id={datas?.id}
                           Name={datas?.product?.Name}
                           price={datas?.product?.price}

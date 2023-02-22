@@ -108,6 +108,34 @@ export const getAuction = () => {
   };
 };
 
+
+export const updateAuction = (id,Name,price,description,tyoe) => {
+  console.log("🚀 ~ file: action.js:113 ~ updateAuction ~ id,Name,price,description,tyoe:", id,Name,price,description,tyoe)
+  return async (dispatch) => {
+    dispatch({
+      type: ActionTypes.Bid_Create_LOADING,
+    });
+    try {
+      const docRef = doc(db, "auctionItems", id);
+       await updateDoc(docRef, {
+        price
+      });
+      toast.success("Auction Updated");
+      dispatch({
+        type: ActionTypes.Bid_Create_SUCCESS,
+      });
+    } catch (e) {
+      dispatch({
+        type: ActionTypes.Bid_Create_FAIL,
+      });
+    }
+  };
+};
+
+
+
+
+
 export const deleteAuction = (id) => {
   return async (dispatch) => {
     dispatch({
