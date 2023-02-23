@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 
-import { getDownloadURL, ref, uploadBytes, deleteObject,getStorage  } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, deleteObject  } from "firebase/storage";
 import { toast } from "react-toastify";
 
 export const Auction = (
