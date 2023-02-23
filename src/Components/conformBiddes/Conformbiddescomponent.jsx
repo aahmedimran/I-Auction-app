@@ -6,10 +6,6 @@ import { getAuction } from "../../store/Auction product/action";
 
 const Conformbiddescomponent = () => {
   const { data } = useSelector((state) => state.getAuction);
-  console.log(
-    "🚀 ~ file: Conformbiddescomponent.jsx:9 ~ Conformbiddescomponent ~ data:",
-    data
-  );
   const User = localStorage.getItem("User");
   const dispatch = useDispatch();
   useEffect(() => {
@@ -42,41 +38,29 @@ const Conformbiddescomponent = () => {
                   height={180}
                 />
                 <Card.Body>
-                  <div className="desc">
-                    <strong>Name:</strong> {datas.product.Name}
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Card.Text>
-                      {datas.product.bidder.map((bidder, index) => (
-                        <div key={index} className="userbid-container">
-                          <input
-                            type="radio"
-                            name="auctionType"
-                            value={bidder.bidderId}
-                          />
-                          <div>
-                            <div>
-                              <strong>bidder Name :</strong>
-                              {bidder.bidderName}
-                            </div>
-                          </div>
-                          <div>
-                            <div>
-                              <strong>bid price :</strong> {bidder.bidPrice}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </Card.Text>
-                  </div>
-                  <div className="button-container">
-                    <Button variant="primary" onClick={() => {}}>
-                      Conform bid
+                  <Card.Text className="item">
+                    <strong>Name :</strong> {datas?.product?.Name}
+                  </Card.Text>
+                  <Card.Text className="item">
+                    <strong>Price :</strong>
+                    {datas?.product?.price}/Rs
+                  </Card.Text>
+                  <Card.Text className="item">
+                    <strong>Categary :</strong>
+                    {datas?.product?.Categary}
+                  </Card.Text>
+                  <Card.Text className="item">
+                    <strong>Type :</strong>
+                    {datas?.product?.type}
+                  </Card.Text>
+                  <Card.Text className="discription">
+                    <strong>Discription :</strong>
+                    {datas?.product?.discription}
+                  </Card.Text>
+
+                  <div>
+                    <Button variant="primary" disabled>
+                      Offer Accapted
                     </Button>
                   </div>
                 </Card.Body>
