@@ -20,8 +20,9 @@ const Userbid = () => {
         data &&
         data?.map(
           (datas, index) =>
-          !datas.product.confirmBid &&
-            datas.product.userId === User && (
+            !datas.product.confirmBid &&
+            datas.product.userId === User &&
+            datas.product.bidder.length >= 1 && (
               <Card
                 style={{
                   width: "20rem",
@@ -86,7 +87,7 @@ const Userbid = () => {
             )
         )
       ) : (
-        <div>data Not found</div>
+        <div style={{backgroundColor: 'black'}}>data Not found</div>
       )}
     </div>
   );
