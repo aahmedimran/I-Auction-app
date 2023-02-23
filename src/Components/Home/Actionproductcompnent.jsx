@@ -114,7 +114,7 @@ const Actionproductcompnent = () => {
                 <option value={"Up Comming auction"}>Up Comming auction</option>
               </select>
             </div>
-            <div>
+            <div className="Actionproductcompnent-filterbar-lastchaild">
               <Addproduct />
             </div>
           </div>
