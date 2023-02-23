@@ -6,9 +6,9 @@ import Userbid from "./Userbid";
 import Yourbid from "./Yourbid";
 const Bidertabscomponent = () => {
   return (
-    <div className="">
+    <div>
       <Tabs
-        defaultActiveKey="home"
+        defaultActiveKey="Your bid"
         id="uncontrolled-tab-example"
        >
         <Tab eventKey="Your bid" title="Your bid" >
