@@ -10,7 +10,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import { getDownloadURL, ref, uploadBytes, deleteObject,getStorage  } from "firebase/storage";
 import { toast } from "react-toastify";
 
 export const Auction = (
@@ -22,7 +23,6 @@ export const Auction = (
   id,
   Categary
 ) => {
-  console.log("🚀 ~ file: action.js:23 ~ Categary", Categary);
   return (dispatch) => {
     dispatch({
       type: ActionTypes.Auction_Create_LOADING,
@@ -142,19 +142,26 @@ export const updateAuction = (id, Name, price, description, type) => {
   };
 };
 
-export const deleteAuction = (id) => {
+export const deleteAuction = (id,file) => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.delete_Auction_LOADING,
     });
+    const path = decodeURIComponent(file.split("?")[0].split("/o/")[1]);
+    const desertRef = ref(storage, path)
     try {
-      const docRef = await doc(db, "auctionItems", id);
-      deleteDoc(docRef);
+      const docRef =  doc(db, "auctionItems", id);
+      await deleteDoc(docRef);
       console.log("Delete Auction Success");
       toast.success("Auction Deleted");
 
       dispatch({
         type: ActionTypes.delete_Auction_SUCCESS,
+      });
+      deleteObject(desertRef).then(() => {
+        console.log("file Deleated")
+      }).catch((error) => {
+        console.log(error,"Uh-oh, an error occurred!") 
       });
     } catch (e) {
       console.log(e, "Error In Api Call delete_Auction");
