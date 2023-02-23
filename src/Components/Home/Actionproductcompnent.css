@@ -9,8 +9,10 @@
 }
 .item{
     text-align: start;
+    margin-bottom: 5px;
 }
 .discription{
+    text-align: start;
     height:6.1vh;
     line-height: 18px;
     display: -webkit-box;

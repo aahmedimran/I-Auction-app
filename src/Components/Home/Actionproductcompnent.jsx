@@ -121,12 +121,17 @@ const Actionproductcompnent = () => {
 
           <div className="actionCard">
             {filterData &&
-              filterData.map((datas, index) => (
+              filterData.map((datas, index) => 
+              
+              !datas.product.confirmBid &&
+              
+              (
+
                 <Card
                   style={{
                     width: "18rem",
                     border: "none",
-                    height: "63vh",
+                    height: "66vh",
                     boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px ",
                   }}
                   key={index}
@@ -139,18 +144,24 @@ const Actionproductcompnent = () => {
                     height={180}
                   />
                   <Card.Body>
-                    <Card.Title className="item">
-                      Name : {datas?.product?.Name}
-                    </Card.Title>
-                    <Card.Title className="item">
-                      Price : {datas?.product?.price}/Rs
-                    </Card.Title>
-                    <Card.Title className="item">
-                      Categary : {datas?.product?.Categary}
-                    </Card.Title>
-                    <Card.Title className="discription">
-                      Discription : {datas?.product?.discription}
-                    </Card.Title>
+                    <Card.Text className="item">
+                      <strong>Name :</strong> {datas?.product?.Name}
+                    </Card.Text>
+                    <Card.Text className="item">
+                      <strong>Price :</strong>
+                      {datas?.product?.price}/Rs
+                    </Card.Text>
+                    <Card.Text className="item">
+                      <strong>Categary :</strong>
+                      {datas?.product?.Categary}
+                    </Card.Text>
+                    <Card.Text className="item">
+                      <strong>Type :</strong>
+                      {datas?.product?.type}
+                    </Card.Text>
+                    <Card.Text className="discription">
+                 <strong>Discription :</strong>{datas?.product?.discription}
+                    </Card.Text>
                     <div className="button-container">
                       {datas?.product?.userId ===
                       localStorage.getItem("User") ? (

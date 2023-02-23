@@ -3,6 +3,8 @@ const INTIALSTATE = {
   addAuctiondata: [],
   getAuction: [],
   bidCreate: [],
+  cancelbid: '',
+  aceaptBid:''
 };
 
 export const addAuction = (state = INTIALSTATE, action) => {
@@ -133,6 +135,29 @@ export const cancelBid = (state = INTIALSTATE, action) => {
         dataLoading: false,
       };
     case ActionTypes.Cancel_Bid_FAIL:
+      return {
+        ...state,
+        dataLoading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const aceaptBid = (state = INTIALSTATE, action) => {
+  switch (action.type) {
+    case ActionTypes.Aceapt_Bid_LOADING:
+      return {
+        ...state,
+        dataLoading: true,
+      };
+    case ActionTypes.Aceapt_Bid_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+        dataLoading: false,
+      };
+    case ActionTypes.Aceapt_Bid_FAIL:
       return {
         ...state,
         dataLoading: false,

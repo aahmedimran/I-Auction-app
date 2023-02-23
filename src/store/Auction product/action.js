@@ -46,6 +46,7 @@ export const Auction = (
               isBid: false,
               confirmBid: false,
               bidder: [],
+              aceaptedBid: [],
             });
             toast.success("Auction Added");
             dispatch({
@@ -108,17 +109,26 @@ export const getAuction = () => {
   };
 };
 
-
-export const updateAuction = (id,Name,price,description,type) => {
-  console.log("🚀 ~ file: action.js:113 ~ updateAuction ~ id,Name,price,description,tyoe:", id,Name,price,description,type)
+export const updateAuction = (id, Name, price, description, type) => {
+  console.log(
+    "🚀 ~ file: action.js:113 ~ updateAuction ~ id,Name,price,description,tyoe:",
+    id,
+    Name,
+    price,
+    description,
+    type
+  );
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.Bid_Create_LOADING,
     });
     try {
       const docRef = doc(db, "auctionItems", id);
-       await updateDoc(docRef, {
-        Name,price,description,type
+      await updateDoc(docRef, {
+        Name,
+        price,
+        description,
+        type,
       });
       toast.success("Auction Updated");
       dispatch({
@@ -131,10 +141,6 @@ export const updateAuction = (id,Name,price,description,type) => {
     }
   };
 };
-
-
-
-
 
 export const deleteAuction = (id) => {
   return async (dispatch) => {
@@ -207,7 +213,6 @@ export const deleteBid = (id) => {
         (bid) => bid.bidderId !== localStorage.getItem("User")
       );
       await updateDoc(docRef, {
-        isBid: false,
         bidder: updatedBidder,
       });
       toast.success("Bid Canceled");
@@ -219,6 +224,49 @@ export const deleteBid = (id) => {
 
       dispatch({
         type: ActionTypes.Cancel_Bid_FAIL,
+      });
+    }
+  };
+};
+
+export const aceaptBid = (productId, UserId) => {
+  console.log(
+    "🚀 ~ file: action.js:233 ~ aceaptBid ~ productId, UserId:",
+    productId,
+    UserId
+  );
+  return async (dispatch) => {
+    dispatch({
+      type: ActionTypes.Aceapt_Bid_LOADING,
+    });
+    try {
+      const docRef = doc(db, "auctionItems", productId);
+      const auctionDetail = await getDoc(docRef);
+      const updatedBidder = auctionDetail
+        .data()
+        .bidder.filter((bid) => bid.bidderId === UserId);
+      await updateDoc(docRef, {
+        isBid: false,
+        bidder: updatedBidder,
+      });
+      await setDoc(
+        docRef,
+        {
+          confirmBid: true,
+          aceaptedBid: [
+            {
+              User: UserId,
+            },
+          ],
+        },
+        { merge: true }
+      );
+      dispatch({
+        type: ActionTypes.Aceapt_Bid_SUCCESS,
+      });
+    } catch (e) {
+      dispatch({
+        type: ActionTypes.Aceapt_Bid_FAIL,
       });
     }
   };

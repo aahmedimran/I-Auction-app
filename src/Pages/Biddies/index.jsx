@@ -1,13 +1,12 @@
-import React from 'react'
-import Bidertabscomponent from '../../Components/Biddies/Bidertabscomponent'
+import React from "react";
+import Bidertabscomponent from "../../Components/Biddies/Bidertabscomponent";
 
 const Biddies = () => {
   return (
-    <div>
-      <Bidertabscomponent/>
+    <>
+      <Bidertabscomponent />
+    </>
+  );
+};
 
-      Biddies</div>
-  )
-}
-
-export default Biddies
+export default Biddies;

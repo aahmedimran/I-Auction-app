@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import {Login,Signup} from './Auth/reducer'
-import {addAuction,getAuction,deleteAuction,updateAuction,createBid,cancelBid} from'./Auction product/reducer'
+import {addAuction,getAuction,deleteAuction,updateAuction,createBid,cancelBid,aceaptBid} from'./Auction product/reducer'
 
 const rootReducer = combineReducers({
   Login,
@@ -10,7 +10,7 @@ const rootReducer = combineReducers({
   updateAuction,
   createBid,
   deleteAuction,
-  cancelBid
- 
+  cancelBid,
+  aceaptBid
 });
 export default rootReducer;

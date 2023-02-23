@@ -28,5 +28,12 @@ const ActionTypes = {
   Cancel_Bid_LOADING: "Cancel_Bid_LOADING",
   Cancel_Bid_SUCCESS: "Cancel_Bid_SUCCESS",
   Cancel_Bid_FAIL: "Cancel_Bid_FAIL",
+
+ // Bid_Create
+ Aceapt_Bid_LOADING: "Aceapt_Create_LOADING",
+ Aceapt_Bid_SUCCESS: "Aceapt_Create_SUCCESS",
+ Aceapt_Bid_FAIL: "Aceapt_Create_FAIL",
+
+
 };
 export default ActionTypes;

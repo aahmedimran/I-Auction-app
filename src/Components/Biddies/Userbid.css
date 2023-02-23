@@ -1,0 +1,12 @@
+*{
+    margin: 0%;
+    padding: 0%;
+}
+.userbid-container{
+    width: 21vw;
+    display: flex;
+    justify-content: space-between;
+}
+.desc{
+    text-align: initial;
+}

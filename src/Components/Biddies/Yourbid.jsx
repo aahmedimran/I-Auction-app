@@ -5,7 +5,6 @@ import Card from "react-bootstrap/Card";
 import { deleteBid, getAuction } from "../../store/Auction product/action";
 const Yourbid = () => {
   const { data } = useSelector((state) => state.getAuction);
-
   const User = localStorage.getItem("User");
   const dispatch = useDispatch();
   useEffect(() => {
@@ -18,7 +17,6 @@ const Yourbid = () => {
         data &&
         data?.map(
           (datas, index) =>
-            datas?.product?.isBid === true &&
             datas?.product?.bidder
               .map((bidderData) => bidderData.bidderId)
               .includes(User) && (
@@ -26,7 +24,7 @@ const Yourbid = () => {
                 style={{
                   width: "18rem",
                   border: "none",
-                  height: "55vh",
+                  height: "66vh",
                   boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px ",
                 }}
                 key={index}
@@ -39,37 +37,41 @@ const Yourbid = () => {
                   height={180}
                 />
                 <Card.Body>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div>
-                      <Card.Title>Name : {datas?.product?.Name}</Card.Title>
-                    </div>
-                    {/* <div>
-                      <Card.Title>
-                        bidderIds : {datas?.product?.bidder.map((bidderId)=><p>{bidderId.bidderId}</p>)}/Rs
-                      </Card.Title>
-                    </div> */}
-                    <div>
-                      <Card.Title>
-                        bidPrice : {datas?.product?.price}/Rs
-                      </Card.Title>
-                    </div>
-                  </div>
+                  <Card.Text className="item">
+                    <strong>Name :</strong> {datas?.product?.Name}
+                  </Card.Text>
+                  <Card.Text className="item">
+                    <strong>Price :</strong>
+                    {datas.product.bidder.map(
+                      (bidder) => bidder.bidderId === User && bidder.bidPrice
+                    )}
+                    /Rs
+                  </Card.Text>
+                  <Card.Text className="item">
+                    <strong> Categary :</strong> {datas?.product?.Categary}
+                  </Card.Text>
+                  <Card.Text className="item">
+                    <strong>Type :</strong>
+                    {datas?.product?.type}
+                  </Card.Text>
                   <Card.Text className="discription">
                     <strong>Discription :</strong> {datas?.product?.discription}
                   </Card.Text>
-                  <div className="button-container">
-                    <Button
-                      variant="primary"
-                      onClick={() => dispatch(deleteBid(datas?.id))}>
-                      {" "}
-                      Cancel bid
-                    </Button>
-                  </div>
+                  {!datas.product.confirmBid ? (
+                    <div className="button-container">
+                      <Button
+                        variant="primary"
+                        onClick={() => dispatch(deleteBid(datas?.id))}
+                      >
+                        {" "}
+                        Cancel bid
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="button-container">
+                      <Button variant="primary"> bid confirmed</Button>
+                    </div>
+                  )}
                 </Card.Body>
               </Card>
             )

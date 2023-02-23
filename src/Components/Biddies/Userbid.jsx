@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { getAuction } from "../../store/Auction product/action";
+import { aceaptBid, getAuction } from "../../store/Auction product/action";
+import "./Userbid.css";
 const Userbid = () => {
   const { data } = useSelector((state) => state.getAuction);
-
+  const [confirmBid, setConfirmBid] = React.useState("");
+  console.log("🚀 ~ file: Userbid.jsx:10 ~ Userbid ~ confirmBid:", confirmBid);
   const User = localStorage.getItem("User");
   const dispatch = useDispatch();
   useEffect(() => {
@@ -18,13 +20,12 @@ const Userbid = () => {
         data &&
         data?.map(
           (datas, index) =>
-            datas.product.isBid &&
+          !datas.product.confirmBid &&
             datas.product.userId === User && (
               <Card
                 style={{
-                  width: "18rem",
+                  width: "20rem",
                   border: "none",
-                  height: "55vh",
                   boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px ",
                 }}
                 key={index}
@@ -37,25 +38,48 @@ const Userbid = () => {
                   height={180}
                 />
                 <Card.Body>
+                  <div className="desc">
+                    <strong>Name:</strong> {datas.product.Name}
+                  </div>
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                     }}
                   >
-                    <div>
-                      <Card.Title>Name : {datas.product.Name}</Card.Title>
-                    </div>
-                    <div>
-                      <Card.Title>Price : {datas.product.price}/Rs</Card.Title>
-                    </div>
+                    <Card.Text>
+                      {datas.product.bidder.map((bidder, index) => (
+                        <div key={index} className="userbid-container">
+                          <input
+                            type="radio"
+                            name="auctionType"
+                            value={bidder.bidderId}
+                            onClick={(e) => setConfirmBid(e.target.value)}
+                          />
+                          <div>
+                            <div>
+                              <strong>bidder Name :</strong>
+                              {bidder.bidderName}
+                            </div>
+                          </div>
+                          <div>
+                            <div>
+                              <strong>bid price :</strong> {bidder.bidPrice}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </Card.Text>
                   </div>
-                  <Card.Text className="discription">
-                    <strong>Discription :</strong> {datas.product.discription}
-                  </Card.Text>
                   <div className="button-container">
-                    <Button variant="primary"> Cancel bid</Button>
-                    <Button variant="primary"> Conform bid</Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        dispatch(aceaptBid(datas?.id, confirmBid));
+                      }}
+                    >
+                      Conform bid
+                    </Button>
                   </div>
                 </Card.Body>
               </Card>
@@ -67,5 +91,4 @@ const Userbid = () => {
     </div>
   );
 };
-
 export default Userbid;

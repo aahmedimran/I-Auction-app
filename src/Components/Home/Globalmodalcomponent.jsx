@@ -27,7 +27,6 @@ const Globalmodalcomponent = ({
   const [auctionDescription, setAuctionDescription] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
   const [auctionType, setAuctionType] = useState("");
-  console.log("🚀 ~ file: Bidmodalcomponent.jsx:30 ~ auctionType:", auctionType)
   const [isDisabled, setIsDisabled] = useState(true);
 
   const handleClick = () => {
