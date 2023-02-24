@@ -12,6 +12,7 @@ const Addproduct = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [selectedValue, setSelectedValue] = useState("");
+  const [isdisable, setIsdisable] = useState(false)
   const [imageUpload, setImageUpload] = useState(null);
   const [selactedCategaryValue, setSelactedCategaryValue] =
     useState("Electrical");
@@ -31,6 +32,7 @@ const Addproduct = () => {
       setSelectedValue("");
       setSelactedCategaryValue("");
       setShow(false);
+      setIsdisable(false)
     }
   }, [data, dispatch]);
 
@@ -54,12 +56,12 @@ const Addproduct = () => {
       toast.error("enter discription");
       return;
     }
-
+    
     if (!selactedCategaryValue) {
       toast.error("Select Categary");
       return;
     }
-
+    
     if (!imageUpload) {
       toast.error("imageUpload");
       return;
@@ -77,8 +79,9 @@ const Addproduct = () => {
         imageUpload,
         User,
         selactedCategaryValue
-      )
-    );
+        )
+        );
+        setIsdisable(true)
   };
   return (
     <>
@@ -139,17 +142,6 @@ const Addproduct = () => {
                 <option value={"Electronics"}>Electronics</option>
               </select>
             </Form.Group>
-
-            {/* <select
-            name="select1"
-            id="select1"
-            value=''
-            // onChange={(e) => setSelactedCategaryValue(e.target.value)}
-          >
-            <option value={"Electrical"}>Electrical</option>
-            <option value={"Electronics"}>Electrical</option>
-          </select> */}
-
             <Form.Group controlId="formFileLg" className="mb-3"></Form.Group>
             <input
               name="Pfile"
@@ -197,7 +189,7 @@ const Addproduct = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleAdd}>
+            <Button variant="primary" onClick={handleAdd} disabled={isdisable} >
               Submit
             </Button>
           </Modal.Footer>

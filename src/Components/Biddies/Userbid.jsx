@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { aceaptBid, getAuction } from "../../store/Auction product/action";
+import { toast } from "react-toastify";
 import "./Userbid.css";
 const Userbid = () => {
   const { data } = useSelector((state) => state.getAuction);
@@ -15,8 +16,7 @@ const Userbid = () => {
 
   return (
     <div className="actionCard">
-      {
-        data &&
+      {data &&
         data?.map(
           (datas, index) =>
             !datas.product.confirmBid &&
@@ -41,17 +41,13 @@ const Userbid = () => {
                   <div className="desc">
                     <strong>Name:</strong> {datas.product.Name}
                   </div>
-                  <div
-                  className="desc-chaild1"
-                    
-                  >
+                  <div className="desc-chaild1">
                     <Card.Text>
                       {datas.product.bidder.map((bidder, index) => (
                         <div key={index} className="userbid-container">
                           <input
                             type="radio"
                             name="auctionType"
-                            checked
                             value={bidder.bidderId}
                             onChange={(e) => setConfirmBid(e.target.value)}
                           />
@@ -74,7 +70,12 @@ const Userbid = () => {
                     <Button
                       variant="primary"
                       onClick={() => {
+                        if (!confirmBid) {
+                          toast.error("first Select");
+                          return;
+                        }
                         dispatch(aceaptBid(datas?.id, confirmBid));
+                        setConfirmBid("");
                       }}
                     >
                       Conform bid
@@ -83,8 +84,7 @@ const Userbid = () => {
                 </Card.Body>
               </Card>
             )
-        )
-      }
+        )}
     </div>
   );
 };
