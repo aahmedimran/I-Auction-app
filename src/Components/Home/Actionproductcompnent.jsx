@@ -120,7 +120,8 @@ const Actionproductcompnent = () => {
           </div>
 
           <div className="actionCard">
-            {filterData &&
+            {filterData.length ? (
+              filterData &&
               filterData.map(
                 (datas, index) =>
                   !datas.product.confirmBid && (
@@ -177,7 +178,9 @@ const Actionproductcompnent = () => {
                               <Button
                                 variant="danger"
                                 onClick={() => {
-                                  dispatch(deleteAuction(datas?.id,datas.product.file));
+                                  dispatch(
+                                    deleteAuction(datas?.id, datas.product.file)
+                                  );
                                 }}
                               >
                                 Delate
@@ -188,11 +191,7 @@ const Actionproductcompnent = () => {
                               .includes(User) ? (
                             <Button
                               variant="danger"
-                              onClick={() =>
-                                dispatch(
-                                  deleteBid(datas?.id)
-                                )
-                              }
+                              onClick={() => dispatch(deleteBid(datas?.id))}
                             >
                               Cancel bid
                             </Button>
@@ -212,7 +211,10 @@ const Actionproductcompnent = () => {
                       </Card.Body>
                     </Card>
                   )
-              )}
+              )
+            ) : (
+              <h1>Data Not Found</h1>
+            )}
           </div>
         </>
       )}

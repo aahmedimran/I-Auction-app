@@ -47,6 +47,7 @@ export const Auction = (
               confirmBid: false,
               bidder: [],
               aceaptedBid: [],
+              time:null
             });
             toast.success("Auction Added");
             dispatch({
@@ -183,6 +184,7 @@ export const createBid = (id, price) => {
       await setDoc(
         docRef,
         {
+          time:new Date().getTime(),
           isBid: true,
           bidder: [
             ...auctionDetail.data().bidder,

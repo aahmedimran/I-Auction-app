@@ -55,7 +55,7 @@ const Userbid = () => {
                             name="auctionType"
                             checked
                             value={bidder.bidderId}
-                            onClick={(e) => setConfirmBid(e.target.value)}
+                            onChange={(e) => setConfirmBid(e.target.value)}
                           />
                           <div>
                             <div>
