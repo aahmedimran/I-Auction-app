@@ -15,7 +15,7 @@ const Userbid = () => {
 
   return (
     <div className="actionCard">
-      {data?.length ? (
+      {
         data &&
         data?.map(
           (datas, index) =>
@@ -42,10 +42,8 @@ const Userbid = () => {
                     <strong>Name:</strong> {datas.product.Name}
                   </div>
                   <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
+                  className="desc-chaild1"
+                    
                   >
                     <Card.Text>
                       {datas.product.bidder.map((bidder, index) => (
@@ -86,9 +84,7 @@ const Userbid = () => {
               </Card>
             )
         )
-      ) : (
-        <div style={{backgroundColor: 'black'}}>data Not found</div>
-      )}
+      }
     </div>
   );
 };
