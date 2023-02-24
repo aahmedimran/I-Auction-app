@@ -7,7 +7,6 @@ import "./Userbid.css";
 const Userbid = () => {
   const { data } = useSelector((state) => state.getAuction);
   const [confirmBid, setConfirmBid] = React.useState("");
-  console.log("🚀 ~ file: Userbid.jsx:10 ~ Userbid ~ confirmBid:", confirmBid);
   const User = localStorage.getItem("User");
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,6 +53,7 @@ const Userbid = () => {
                           <input
                             type="radio"
                             name="auctionType"
+                            checked
                             value={bidder.bidderId}
                             onClick={(e) => setConfirmBid(e.target.value)}
                           />
