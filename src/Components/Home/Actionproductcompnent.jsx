@@ -143,23 +143,23 @@ const Actionproductcompnent = () => {
                       />
                       <Card.Body>
                         <Card.Text className="item">
-                          <strong>Name :</strong> {datas?.product?.Name}
+                          <strong>Name: </strong>{datas?.product?.Name}
                         </Card.Text>
                         <Card.Text className="item">
-                          <strong>Price :</strong>
-                          {datas?.product?.price}/Rs
+                          <strong>Price: </strong>
+                           {datas?.product?.price}/Rs
                         </Card.Text>
                         <Card.Text className="item">
-                          <strong>Categary :</strong>
-                          {datas?.product?.Categary}
+                          <strong>Categary: </strong>
+                           {datas?.product?.Categary}
                         </Card.Text>
                         <Card.Text className="item">
-                          <strong>Type :</strong>
+                          <strong>Type: </strong>
                           {datas?.product?.type}
                         </Card.Text>
                         <Card.Text className="discription">
-                          <strong>Discription :</strong>
-                          {datas?.product?.discription}
+                          <strong>Discription: </strong>
+                           {datas?.product?.discription}
                         </Card.Text>
                         <div className="button-container">
                           {datas?.product?.userId ===
