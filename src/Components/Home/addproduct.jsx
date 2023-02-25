@@ -30,7 +30,6 @@ const Addproduct = () => {
     if (data) {
       setInputValue({ Name: "", price: "", discription: "" });
       setSelectedValue("");
-      setSelactedCategaryValue("");
       setShow(false);
       setIsdisable(false)
     }

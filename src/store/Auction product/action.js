@@ -11,7 +11,12 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 
-import { getDownloadURL, ref, uploadBytes, deleteObject  } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  deleteObject,
+} from "firebase/storage";
 import { toast } from "react-toastify";
 
 export const Auction = (
@@ -24,6 +29,13 @@ export const Auction = (
   Categary
 ) => {
   return (dispatch) => {
+    var date = new Date();
+    // add a day
+    date.setDate(date.getDate() + 1);
+    //convert milisecond
+    var milliseconds = date.getTime();
+    console.log(milliseconds);
+
     dispatch({
       type: ActionTypes.Auction_Create_LOADING,
     });
@@ -47,7 +59,7 @@ export const Auction = (
               confirmBid: false,
               bidder: [],
               aceaptedBid: [],
-              time:null
+              auctionEndTime: milliseconds,
             });
             toast.success("Auction Added");
             dispatch({
@@ -69,7 +81,7 @@ export const Auction = (
 };
 
 export const getAuction = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({
       type: ActionTypes.Auction_Create_LOADING,
     });
@@ -80,6 +92,45 @@ export const getAuction = () => {
         querySnapshot.forEach((doc) => {
           auctionItem.push({ id: doc.id, product: doc.data() });
         });
+
+         const checkTime = auctionItem.filter(
+          (data) => new Date(data.product.auctionEndTime) < new Date()
+        );
+        if (checkTime) {
+          try {
+            const productId = checkTime.map((data) => data.id);
+            // console.log(userId[0]);
+            const a = checkTime.map((data) => data.product.bidder);
+
+            let maxObject = a[0].reduce((max, obj) =>
+              obj.bidPrice > max.bidPrice ? obj : max
+            );
+            console.log(maxObject.bidderId);
+            console.log(maxObject);
+            const docRef = doc(db, "auctionItems", productId[0]);
+            // const userId .bidder.filter((bid) => bid.bidderId === UserId);
+            updateDoc(docRef, {
+              isBid: false,
+              bidder: maxObject,
+            });
+            setDoc(
+              docRef,
+              {
+                auctionEndTime: null,
+                confirmBid: true,
+                aceaptedBid: [
+                  {
+                    User: maxObject.bidderId,
+                  },
+                ],
+              },
+              { merge: true }
+            );
+          } catch (e) {
+            console.log("error");
+          }
+        }
+
         dispatch({
           type: ActionTypes.Auction_Get_SUCCESS,
           payload: [...auctionItem],
@@ -143,15 +194,15 @@ export const updateAuction = (id, Name, price, description, type) => {
   };
 };
 
-export const deleteAuction = (id,file) => {
+export const deleteAuction = (id, file) => {
   return async (dispatch) => {
     dispatch({
       type: ActionTypes.delete_Auction_LOADING,
     });
     const path = decodeURIComponent(file.split("?")[0].split("/o/")[1]);
-    const desertRef = ref(storage, path)
+    const desertRef = ref(storage, path);
     try {
-      const docRef =  doc(db, "auctionItems", id);
+      const docRef = doc(db, "auctionItems", id);
       await deleteDoc(docRef);
       console.log("Delete Auction Success");
       toast.success("Auction Deleted");
@@ -159,11 +210,13 @@ export const deleteAuction = (id,file) => {
       dispatch({
         type: ActionTypes.delete_Auction_SUCCESS,
       });
-      deleteObject(desertRef).then(() => {
-        console.log("file Deleated")
-      }).catch((error) => {
-        console.log(error,"Uh-oh, an error occurred!") 
-      });
+      deleteObject(desertRef)
+        .then(() => {
+          console.log("file Deleated");
+        })
+        .catch((error) => {
+          console.log(error, "Uh-oh, an error occurred!");
+        });
     } catch (e) {
       console.log(e, "Error In Api Call delete_Auction");
       dispatch({
@@ -184,7 +237,6 @@ export const createBid = (id, price) => {
       await setDoc(
         docRef,
         {
-          time:new Date().getTime(),
           isBid: true,
           bidder: [
             ...auctionDetail.data().bidder,

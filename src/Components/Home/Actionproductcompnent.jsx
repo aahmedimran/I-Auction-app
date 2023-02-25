@@ -24,7 +24,7 @@ const Actionproductcompnent = () => {
   useEffect(() => {
     dispatch(getAuction());
   }, []); // eslint-disable-line
-
+ 
   const filterdData = () => {
     if (data) {
       setloading(false);
