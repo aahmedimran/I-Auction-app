@@ -30,11 +30,8 @@ const Globalmodalcomponent = ({
   const [isDisabled, setIsDisabled] = useState(true);
 
   const handleClick = () => {
-    if (title === "Update") {
-      setIsDisabled(false);
-    }
+    if (title === "Update") setIsDisabled(false);
   };
-
   useEffect(() => {
     setAuctionName(Name);
     setAuctionPrice(price);
@@ -45,7 +42,15 @@ const Globalmodalcomponent = ({
 
   const handleAdd = () => {
     if (title === "Update") {
-      dispatch(updateAuction(id,auctionName,auctionPrice,auctionDescription,auctionType));
+      dispatch(
+        updateAuction(
+          id,
+          auctionName,
+          auctionPrice,
+          auctionDescription,
+          auctionType
+        )
+      );
       // setAuctionName("");
       // setAuctionPrice("");
       // setAuctionDescription("");

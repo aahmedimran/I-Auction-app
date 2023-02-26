@@ -12,7 +12,7 @@ const Addproduct = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [selectedValue, setSelectedValue] = useState("");
-  const [isdisable, setIsdisable] = useState(false)
+  const [isdisable, setIsdisable] = useState(false);
   const [imageUpload, setImageUpload] = useState(null);
   const [selactedCategaryValue, setSelactedCategaryValue] =
     useState("Electrical");
@@ -31,7 +31,7 @@ const Addproduct = () => {
       setInputValue({ Name: "", price: "", discription: "" });
       setSelectedValue("");
       setShow(false);
-      setIsdisable(false)
+      setIsdisable(false);
     }
   }, [data, dispatch]);
 
@@ -43,32 +43,12 @@ const Addproduct = () => {
 
   const handleAdd = () => {
     const { Name, price, discription } = inputValue;
-    if (!Name) {
-      toast.error("enter Name");
-      return;
-    }
-    if (!price) {
-      toast.error("enter Price");
-      return;
-    }
-    if (!discription) {
-      toast.error("enter discription");
-      return;
-    }
-    
-    if (!selactedCategaryValue) {
-      toast.error("Select Categary");
-      return;
-    }
-    
-    if (!imageUpload) {
-      toast.error("imageUpload");
-      return;
-    }
-    if (!selectedValue) {
-      toast.error("select Auction Type ");
-      return;
-    }
+    if (!Name) return toast.error("enter Name");
+    if (!price) return toast.error("enter Price");
+    if (!discription) return toast.error("enter discription");
+    if (!selactedCategaryValue) return toast.error("Select Categary");
+    if (!imageUpload) return toast.error("imageUpload");
+    if (!selectedValue) return toast.error("select Auction Type ");
     dispatch(
       Auction(
         Name,
@@ -78,9 +58,9 @@ const Addproduct = () => {
         imageUpload,
         User,
         selactedCategaryValue
-        )
-        );
-        setIsdisable(true)
+      )
+    );
+    setIsdisable(true);
   };
   return (
     <>
@@ -188,7 +168,7 @@ const Addproduct = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleAdd} disabled={isdisable} >
+            <Button variant="primary" onClick={handleAdd} disabled={isdisable}>
               Submit
             </Button>
           </Modal.Footer>
