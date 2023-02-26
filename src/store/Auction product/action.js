@@ -92,12 +92,15 @@ export const getAuction = () => {
         querySnapshot.forEach((doc) => {
           auctionItem.push({ id: doc.id, product: doc.data() });
         });
-
-         const checkTime = auctionItem.filter(
+        const timeAvailable = auctionItem.filter(
+          (data) => data.product.auctionEndTime !== null
+        );
+        const checkTime = timeAvailable.filter(
           (data) => new Date(data.product.auctionEndTime) < new Date()
         );
-        if (checkTime) {
+        if (checkTime.length > 0) {
           try {
+            // debugger
             const productId = checkTime.map((data) => data.id);
             // console.log(userId[0]);
             const a = checkTime.map((data) => data.product.bidder);
@@ -108,15 +111,14 @@ export const getAuction = () => {
             console.log(maxObject.bidderId);
             console.log(maxObject);
             const docRef = doc(db, "auctionItems", productId[0]);
-            // const userId .bidder.filter((bid) => bid.bidderId === UserId);
             updateDoc(docRef, {
+              auctionEndTime: null,
               isBid: false,
-              bidder: maxObject,
+              bidder: [maxObject],
             });
             setDoc(
               docRef,
               {
-                auctionEndTime: null,
                 confirmBid: true,
                 aceaptedBid: [
                   {
@@ -129,6 +131,8 @@ export const getAuction = () => {
           } catch (e) {
             console.log("error");
           }
+        } else {
+          console.log("data not found");
         }
 
         dispatch({
@@ -306,7 +310,9 @@ export const aceaptBid = (productId, UserId) => {
       const updatedBidder = auctionDetail
         .data()
         .bidder.filter((bid) => bid.bidderId === UserId);
+      console.log(updatedBidder);
       await updateDoc(docRef, {
+        auctionEndTime: null,
         isBid: false,
         bidder: updatedBidder,
       });
