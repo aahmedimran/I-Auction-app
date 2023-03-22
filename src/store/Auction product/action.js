@@ -24,6 +24,7 @@ export const Auction = (
   price,
   discription,
   selectedValue,
+  auctionTime,
   imageUpload,
   id,
   Categary
@@ -31,7 +32,7 @@ export const Auction = (
   return (dispatch) => {
     var date = new Date();
     // add a day
-    date.setDate(date.getDate() + 1);
+    date.setDate(date.getDate() + +auctionTime);
     //convert milisecond
     var milliseconds = date.getTime();
     console.log(milliseconds);

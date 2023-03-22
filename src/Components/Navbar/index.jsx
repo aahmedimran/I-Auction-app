@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router";
+import Modeswitch from "../../helper/mode-switch";
 
 const Bar = () => {
   const navigate = useNavigate();
@@ -20,7 +21,8 @@ const Bar = () => {
   return (
     <Navbar bg="light" expand="lg" sticky="top">
       <Container>
-        <LinkContainer to="/Home">
+      <Modeswitch />
+        <LinkContainer to="">
           <Navbar.Brand>I-Auction app</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

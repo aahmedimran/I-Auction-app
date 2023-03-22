@@ -32,17 +32,20 @@ export const Signup = (state = INTIALSTATE, action) => {
       return {
         ...state,
         dataLoading: true,
+        created:false
       };
     case ActionTypes.User_Create_SUCCESS:
       return {
         ...state,
         data: action.payload,
         dataLoading: false,
+        created:true
       };
     case ActionTypes.User_Create_FAIL:
       return {
         ...state,
         dataLoading: false,
+        created:false
       };
     default:
       return state;

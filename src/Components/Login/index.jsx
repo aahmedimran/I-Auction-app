@@ -17,6 +17,7 @@ import { Userauth } from "../../store/Auth/action";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { validateEmail } from "../../helper/validater/email";
 function Copyright(props) {
   const { data } = useSelector((state) => state.Login); // eslint-disable-line
   const User = localStorage.getItem("User");
@@ -50,14 +51,10 @@ const Logincomponent = () => {
     e.preventDefault();
 
     const data = new FormData(e.currentTarget);
-    if (!data.get("email")) {
-      toast.error("Enter Email");
-      return;
-    }
-    if (!data.get("password")) {
-      toast.error("Enter password");
-      return;
-    }
+
+    if (!validateEmail(data.get("email"))) return toast.error("Enter valid Email Adress");
+    if (!data.get("email")) return toast.error("Enter Email");
+    if (!data.get("password")) return toast.error("Enter password");
     dispatch(Userauth(data.get("email"), data.get("password")));
   };
 

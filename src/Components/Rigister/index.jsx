@@ -15,43 +15,45 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { Usercreate } from "../../store/Auth/action";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { validateEmail } from "../../helper/validater/email";
 function Copyright(props) {
   const navigate = useNavigate();
-  const { dataLoading } = useSelector((state) => state.Signup);
+  const { created } = useSelector((state) => state.Signup);
+  if(created) navigate("/")
   const User = localStorage.getItem("User");
-  if (!dataLoading) {
-    navigate("/");
-  }
+  
   React.useEffect(() => {
-    if (User) {
-      navigate("/Home");
-    }
-  }, [User, navigate]);
+    if (User) navigate("/Home");
+  }, [User, navigate]); 
   return (
-    <Typography
+    <Typography 
       variant="body2"
       color="text.secondary"
       align="center"
       {...props}
     >
-      {"Copyright © "}
-      <Link color="inherit" href="/">
-      I-Auction app
+      {"Copyright © "}  
+      <Link color="inherit" href="/"> 
+        I-Auction app
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
   );
 }
-
 const theme = createTheme();
-
 export default function Rigistercomponent() {
   const dispatch = useDispatch();
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (!data.get("firstName")) return toast.error("Enter First name");
+    if (!data.get("lastName")) return toast.error("Enter lastName");
+    if (!data.get("email")) return toast.error("Enter email");
+    if (!validateEmail(data.get("email"))) return toast.error("Enter valid Email Address");
+    if (!data.get("password")) return toast.error("password");
+    // if (!passwordValidate(data.get("password"))) return toast.error("Your Password in secure");
     dispatch(
       Usercreate(
         data.get("firstName"),

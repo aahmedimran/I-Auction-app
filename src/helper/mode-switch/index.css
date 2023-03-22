@@ -1,0 +1,11 @@
+.mode-button>button{
+  border: none;
+  background-color: #F8F9FA;
+  padding-right: 5px;
+  
+}
+.theme{
+  background-color: #23272F !important;
+  color: white !important;
+ 
+}

@@ -1,9 +1,17 @@
-import React from 'react'
-import Logincomponent from '../../Components/Login'
+import React from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import Logincomponent from "../../Components/Login";
 
 const Login = () => {
   return (
-    <div><Logincomponent/></div>
-  )
-}
-export default Login
+    <>
+      <HelmetProvider>
+        <Helmet>
+          <title>I-Auction app | Login</title>
+        </Helmet>
+        <Logincomponent />
+      </HelmetProvider>
+    </>
+  );
+};
+export default Login;
