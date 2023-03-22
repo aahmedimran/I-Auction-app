@@ -13,6 +13,8 @@ import Bidmodalcomponent from "./Globalmodalcomponent";
 import Loader from "../../helper/loader";
 const Actionproductcompnent = () => {
   const { data } = useSelector((state) => state.getAuction);
+  console.log("? ~ file: :", data);
+  const userViewMode = useSelector((state) => state.changeTheMode.isdarkMode);
   const dispatch = useDispatch();
   const User = localStorage.getItem("User");
   const [selactedAuctionValue, setSelactedAuctionValue] =
@@ -28,7 +30,7 @@ const Actionproductcompnent = () => {
   const filterdData = () => {
     if (data) {
       setloading(false);
-      const temp = [...data];
+      const temp = [...data] || data;
       // =====// Auction Filter
       if (
         selactedAuctionValue === "All auction" &&
@@ -41,7 +43,7 @@ const Actionproductcompnent = () => {
         selactedCategaryValue === "Electrical"
       ) {
         const update = temp.filter(
-          (data) => data.product.Categary === "Electrical"
+          (auctionDatas) => auctionDatas.product.Categary === "Electrical"
         );
         setFilterData(update);
       }
@@ -74,124 +76,133 @@ const Actionproductcompnent = () => {
         );
         setFilterData(update);
       }
+      if (
+        "Electrical" === "Up Comming auction" &&
+        selactedCategaryValue === "Electrical"
+      ) {
+        const update = temp.filter(
+          (data) => data.product.type === "Up Comming auction"
+        );
+        setFilterData(update);
+      }
     }
   };
 
   useEffect(() => {
     filterdData();
   }, [data, selactedCategaryValue, selactedAuctionValue]); // eslint-disable-line
-
+  const Categaries = ["All Categary", "Electrical", "Electronics"];
+  const AuctionTypes = ["All auction", "Currunt auction", "Up Comming auction"];
   return (
-    <>
+    <div className={`main-container ${userViewMode && "theme"}`}>
+      <div className={`Actionproductcompnent-filterbar ${userViewMode && "theme"} `}>
+        <div>
+          <label htmlFor="">Categary</label>
+          <select
+            name="Categary"
+            id="Categary"
+            value={selactedCategaryValue}
+            onChange={(e) => setSelactedCategaryValue(e.target.value)}
+          >
+            {Categaries.map((Categary, index) => (
+              <option key={index} value={Categary}>
+                {Categary}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="">Auction Types</label>
+          <select
+            name="Auction Types"
+            id="AuctionTypes"
+            value={selactedAuctionValue}
+            onChange={(e) => setSelactedAuctionValue(e.target.value)}
+          >
+            {AuctionTypes.map((type, index) => (
+              <option key={index} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="Actionproductcompnent-filterbar-lastchaild ">
+          <Addproduct />
+        </div>
+      </div>
       {loading ? (
         <Loader />
       ) : (
         <>
-          <div className="Actionproductcompnent-filterbar">
-            <div>
-              <label htmlFor="">Categary</label>
-              <select
-                name="select1"
-                id="select1"
-                value={selactedCategaryValue}
-                onChange={(e) => setSelactedCategaryValue(e.target.value)}
-              >
-                <option value={"All Categary"}>All Categary</option>
-                <option value={"Electrical"}>Electrical</option>
-                <option value={"Electronics"}>Electronics</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="">Auction Types</label>
-              <select
-                name="select1"
-                id="select1"
-                value={selactedAuctionValue}
-                onChange={(e) => setSelactedAuctionValue(e.target.value)}
-              >
-                <option value={"All auction"}>All auction</option>
-                <option value={"Currunt auction"}>Currunt auction</option>
-                <option value={"Up Comming auction"}>Up Comming auction</option>
-              </select>
-            </div>
-            <div className="Actionproductcompnent-filterbar-lastchaild">
-              <Addproduct />
-            </div>
-          </div>
-
-          <div className="actionCard">
+          <div className="actionCard ">
             {filterData.length ? (
               filterData &&
               filterData.map(
-                (datas, index) =>
-                  !datas.product.confirmBid && (
+                (data, index) =>
+                  !data.product.confirmBid && (
+                    
                     <Card
-                      style={{
-                        width: "18rem",
-                        border: "none",
-                        height: "66vh",
-                        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px ",
-                      }}
                       key={index}
-                      className=" mt-3 "
+                      className={`mt-3 productcards ${userViewMode && "theme productcardstheme"}`}
                     >
                       <Card.Img
                         variant="top"
-                        src={datas.product.file}
+                        src={data.product.file}
                         width={171}
                         height={180}
                       />
                       <Card.Body>
                         <Card.Text className="item">
-                          <strong>Name: </strong>{datas?.product?.Name}
+                          <strong>Name: </strong>
+                          {data?.product?.Name}
                         </Card.Text>
                         <Card.Text className="item">
                           <strong>Price: </strong>
-                           {datas?.product?.price}/Rs
+                          {data?.product?.price}/Rs
                         </Card.Text>
                         <Card.Text className="item">
                           <strong>Categary: </strong>
-                           {datas?.product?.Categary}
+                          {data?.product?.Categary}
                         </Card.Text>
                         <Card.Text className="item">
                           <strong>Type: </strong>
-                          {datas?.product?.type}
+                          {data?.product?.type}
                         </Card.Text>
                         <Card.Text className="discription">
                           <strong>Discription: </strong>
-                           {datas?.product?.discription}
+                          {data?.product?.discription}
                         </Card.Text>
                         <div className="button-container">
-                          {datas?.product?.userId ===
+                          {data?.product?.userId ===
                           localStorage.getItem("User") ? (
                             <>
                               <Bidmodalcomponent
                                 title="Update"
                                 heading="Update Auction"
-                                id={datas?.id}
-                                Name={datas?.product?.Name}
-                                price={datas?.product?.price}
-                                discription={datas?.product?.discription}
-                                file={datas?.product?.file}
-                                type={datas?.product?.type}
+                                id={data?.id}
+                                Name={data?.product?.Name}
+                                price={data?.product?.price}
+                                discription={data?.product?.discription}
+                                file={data?.product?.file}
+                                type={data?.product?.type}
                               />
                               <Button
                                 variant="danger"
                                 onClick={() => {
                                   dispatch(
-                                    deleteAuction(datas?.id, datas.product.file)
+                                    deleteAuction(data?.id, data.product.file)
                                   );
                                 }}
                               >
                                 Delate
                               </Button>
                             </>
-                          ) : datas?.product?.bidder
+                          ) : data?.product?.bidder
                               .map((bidderData) => bidderData.bidderId)
                               .includes(User) ? (
                             <Button
                               variant="danger"
-                              onClick={() => dispatch(deleteBid(datas?.id))}
+                              onClick={() => dispatch(deleteBid(data?.id))}
                             >
                               Cancel bid
                             </Button>
@@ -199,12 +210,12 @@ const Actionproductcompnent = () => {
                             <Bidmodalcomponent
                               title="Bid Here"
                               heading="Bid"
-                              id={datas?.id}
-                              Name={datas?.product?.Name}
-                              price={datas?.product?.price}
-                              discription={datas?.product?.discription}
-                              file={datas?.product?.file}
-                              type={datas?.product?.type}
+                              id={data?.id}
+                              Name={data?.product?.Name}
+                              price={data?.product?.price}
+                              discription={data?.product?.discription}
+                              file={data?.product?.file}
+                              type={data?.product?.type}
                             />
                           )}
                         </div>
@@ -218,8 +229,7 @@ const Actionproductcompnent = () => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
-
 export default Actionproductcompnent;

@@ -6,8 +6,11 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Auction } from "../../store/Auction product/action";
+import { HashLoader } from "react-spinners";
 
 const Addproduct = () => {
+  const User = localStorage.getItem("User");
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -16,25 +19,24 @@ const Addproduct = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const [selactedCategaryValue, setSelactedCategaryValue] =
     useState("Electrical");
+  const [updatwloading, setupdateloading] = useState(false);
 
   const [inputValue, setInputValue] = useState({
     Name: "",
     price: "",
     discription: "",
+    auctionTime: ""
   });
-  const User = localStorage.getItem("User");
   const { data } = useSelector((state) => state.addAuction);
-
-  const dispatch = useDispatch();
   React.useEffect(() => {
     if (data) {
-      setInputValue({ Name: "", price: "", discription: "" });
+      setInputValue({ Name: "", price: "", discription: "", auctionTime: ""});
       setSelectedValue("");
       setShow(false);
       setIsdisable(false);
+      setupdateloading(false);
     }
   }, [data, dispatch]);
-
   const ChangeInputValue = (event) => {
     let Value = { ...inputValue };
     Value[event.target.name] = event.target.value;
@@ -42,25 +44,29 @@ const Addproduct = () => {
   };
 
   const handleAdd = () => {
-    const { Name, price, discription } = inputValue;
-    if (!Name) return toast.error("enter Name");
-    if (!price) return toast.error("enter Price");
-    if (!discription) return toast.error("enter discription");
+    const { Name, price, discription,auctionTime } = inputValue;
+    if (!Name) return toast.error("Enter Name");
+    if (!price) return toast.error("Enter Price");
+    if (!discription) return toast.error("Enter Discription");
+    if (!auctionTime) return toast.error("Enter auctionTime");
     if (!selactedCategaryValue) return toast.error("Select Categary");
-    if (!imageUpload) return toast.error("imageUpload");
-    if (!selectedValue) return toast.error("select Auction Type ");
+    if (!imageUpload) return toast.error("ImageUpload");
+    if (!selectedValue) return toast.error("Select Auction Type ");
+
     dispatch(
       Auction(
         Name,
         price,
         discription,
         selectedValue,
+        auctionTime,
         imageUpload,
         User,
         selactedCategaryValue
       )
     );
     setIsdisable(true);
+    setupdateloading(true);
   };
   return (
     <>
@@ -72,6 +78,21 @@ const Addproduct = () => {
           <Modal.Header closeButton>
             <Modal.Title>Add New Auction</Modal.Title>
           </Modal.Header>
+          {updatwloading && (
+            <HashLoader
+              color={"#0D6EFD"}
+              size={60}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+              style={{
+                width: "none",
+                display: "flex",
+                position: "relitive",
+                height: "none",
+                transform: "rotate(165deg)",
+              }}
+            />
+          )}
           <Modal.Body>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Auction Product Name</Form.Label>
@@ -108,38 +129,52 @@ const Addproduct = () => {
                 onChange={ChangeInputValue}
               />
             </FloatingLabel>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Categary</Form.Label>
-              <select
-                name="select1"
-                id="select1"
-                value={selactedCategaryValue}
-                onChange={(e) => setSelactedCategaryValue(e.target.value)}
-              >
-                <option value={"Electrical"}>Electrical</option>
-                <option value={"Electronics"}>Electronics</option>
-              </select>
+            <div className="d-flex gap-5">
+              <Form.Group className="d-flex flex-row gap-3 align-items-center">
+                <span>Categary</span>
+                <select
+                  name="select1"
+                  id="select1"
+                  value={selactedCategaryValue}
+                  onChange={(e) => setSelactedCategaryValue(e.target.value)}
+                >
+                  <option value={"Electrical"}>Electrical</option>
+                  <option value={"Electronics"}>Electronics</option>
+                </select>
+              </Form.Group>
+              <Form.Group className="d-flex flex-row align-items-center gap-3">
+                <span>Auction time days</span>
+                <Form.Control
+                  type="number"
+                  placeholder="Auction Price"
+                  name="auctionTime"
+                value={inputValue.auctionTime}
+                onChange={ChangeInputValue}
+                  className="w-50"
+                />
+              </Form.Group>
+            </div>
+            <Form.Group controlId="formFileLg" className="mb-3">
+              <span>Image : </span>
+              <input
+                name="Pfile"
+                type="file"
+                placeholder=""
+                id="profilePictureInput"
+                required
+                accept="image/*"
+                onChange={(e) => {
+                  setImageUpload(e.target.files[0]);
+                  var profilePictureInput = document.getElementById(
+                    "profilePictureInput"
+                  );
+                  var url = URL.createObjectURL(profilePictureInput.files[0]);
+                  document.getElementById(
+                    "img"
+                  ).innerHTML = `<img width ="200px" src="${url}"  id="img" >`;
+                }}
+              />
             </Form.Group>
-            <Form.Group controlId="formFileLg" className="mb-3"></Form.Group>
-            <input
-              name="Pfile"
-              type="file"
-              placeholder=""
-              id="profilePictureInput"
-              required
-              accept="image/*"
-              onChange={(e) => {
-                setImageUpload(e.target.files[0]);
-                var profilePictureInput = document.getElementById(
-                  "profilePictureInput"
-                );
-                var url = URL.createObjectURL(profilePictureInput.files[0]);
-                document.getElementById(
-                  "img"
-                ).innerHTML = `<img width ="200px" src="${url}"  id="img" >`;
-              }}
-            />
             <div id="img"></div>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check
