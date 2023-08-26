@@ -11,6 +11,7 @@ import Card from "react-bootstrap/Card";
 import "./Actionproductcompnent.css";
 import Bidmodalcomponent from "./Globalmodalcomponent";
 import Loader from "../../helper/loader";
+import LiveTimer from "../../helper/LiveTimer";
 const Actionproductcompnent = () => {
   const { data } = useSelector((state) => state.getAuction);
   console.log("? ~ file: :", data);
@@ -26,7 +27,7 @@ const Actionproductcompnent = () => {
   useEffect(() => {
     dispatch(getAuction());
   }, []); // eslint-disable-line
- 
+
   const filterdData = () => {
     if (data) {
       setloading(false);
@@ -137,79 +138,56 @@ const Actionproductcompnent = () => {
           <div className="actionCard ">
             {filterData.length ? (
               filterData &&
-              filterData.map(
+              filterData.filter((data) => data.product.confirmBid !== true).map(
                 (data, index) =>
-                  !data.product.confirmBid && (
-                    
-                    <Card
-                      key={index}
-                      className={`mt-3 productcards ${userViewMode && "theme productcardstheme"}`}
-                    >
-                      <Card.Img
-                        variant="top"
-                        src={data.product.file}
-                        width={171}
-                        height={180}
-                      />
-                      <Card.Body>
-                        <Card.Text className="item">
-                          <strong>Name: </strong>
-                          {data?.product?.Name}
-                        </Card.Text>
-                        <Card.Text className="item">
-                          <strong>Price: </strong>
-                          {data?.product?.price}/Rs
-                        </Card.Text>
-                        <Card.Text className="item">
-                          <strong>Categary: </strong>
-                          {data?.product?.Categary}
-                        </Card.Text>
-                        <Card.Text className="item">
-                          <strong>Type: </strong>
-                          {data?.product?.type}
-                        </Card.Text>
-                        <Card.Text className="discription">
-                          <strong>Discription: </strong>
-                          {data?.product?.discription}
-                        </Card.Text>
-                        <div className="button-container">
-                          {data?.product?.userId ===
+                (
+
+                  <Card
+                    key={index}
+                    className={`mt-3 productcards ${userViewMode && "theme productcardstheme"}`}
+                  >
+<div className="liveTimer"><LiveTimer
+targetTime={new Date(data?.product?.auctionEndTime).setHours(
+  new Date(data?.product?.auctionEndTime).getHours() 
+)}
+
+/></div>
+                  
+
+                    <Card.Img
+                      variant="top"
+                      src={data.product.file}
+                      width={171}
+                      height={180}
+                    />
+                    <Card.Body>
+                      <Card.Text className="item">
+                        <strong>Name: </strong>
+                        {data?.product?.Name}
+                      </Card.Text>
+                      <Card.Text className="item">
+                        <strong>Price: </strong>
+                        {data?.product?.price}/Rs
+                      </Card.Text>
+                      <Card.Text className="item">
+                        <strong>Categary: </strong>
+                        {data?.product?.Categary}
+                      </Card.Text>
+                      <Card.Text className="item">
+                        <strong>Type: </strong>
+                        {data?.product?.type}
+                      </Card.Text>
+                      <Card.Text className="discription">
+                        <strong>Discription: </strong>
+                        {data?.product?.discription}
+                      </Card.Text>
+                      <div className="button-container">
+                        {data?.product?.userId ===
                           localStorage.getItem("User") ? (
-                            <>
-                              <Bidmodalcomponent
-                                title="Update"
-                                heading="Update Auction"
-                                id={data?.id}
-                                Name={data?.product?.Name}
-                                price={data?.product?.price}
-                                discription={data?.product?.discription}
-                                file={data?.product?.file}
-                                type={data?.product?.type}
-                              />
-                              <Button
-                                variant="danger"
-                                onClick={() => {
-                                  dispatch(
-                                    deleteAuction(data?.id, data.product.file)
-                                  );
-                                }}
-                              >
-                                Delate
-                              </Button>
-                            </>
-                          ) : data?.product?.bidder
-                              .map((bidderData) => bidderData.bidderId)
-                              .includes(User) ? (
-                            <Button
-                              variant="danger"
-                              onClick={() => dispatch(deleteBid(data?.id))}
-                            >
-                              Cancel bid
-                            </Button>
-                          ) : (
+                          <>
                             <Bidmodalcomponent
-                              title="Bid Here"
-                              heading="Bid"
+                              title="Update"
+                              heading="Update Auction"
                               id={data?.id}
                               Name={data?.product?.Name}
                               price={data?.product?.price}
@@ -217,11 +195,42 @@ const Actionproductcompnent = () => {
                               file={data?.product?.file}
                               type={data?.product?.type}
                             />
-                          )}
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  )
+                            <Button
+                              variant="danger"
+                              onClick={() => {
+                                dispatch(
+                                  deleteAuction(data?.id, data.product.file)
+                                );
+                              }}
+                            >
+                              Delate
+                            </Button>
+                          </>
+                        ) : data?.product?.bidder
+                          .map((bidderData) => bidderData.bidderId)
+                          .includes(User) ? (
+                          <Button
+                            variant="danger"
+                            onClick={() => dispatch(deleteBid(data?.id))}
+                          >
+                            Cancel bid
+                          </Button>
+                        ) : (
+                          <Bidmodalcomponent
+                            title="Bid Here"
+                            heading="Bid"
+                            id={data?.id}
+                            Name={data?.product?.Name}
+                            price={data?.product?.price}
+                            discription={data?.product?.discription}
+                            file={data?.product?.file}
+                            type={data?.product?.type}
+                          />
+                        )}
+                      </div>
+                    </Card.Body>
+                  </Card>
+                )
               )
             ) : (
               <h1 className="m-5">Data Not Found</h1>
