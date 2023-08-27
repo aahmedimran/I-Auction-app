@@ -146,14 +146,12 @@ const Actionproductcompnent = () => {
                     key={index}
                     className={`mt-3 productcards ${userViewMode && "theme productcardstheme"}`}
                   >
-<div className="liveTimer"><LiveTimer
-targetTime={new Date(data?.product?.auctionEndTime).setHours(
-  new Date(data?.product?.auctionEndTime).getHours() 
-)}
+                    <div className="liveTimer"><LiveTimer
+                      targetTime={new Date(data?.product?.auctionEndTime).setHours(
+                        new Date(data?.product?.auctionEndTime).getHours()
+                      )}
 
-/></div>
-                  
-
+                    /></div>
                     <Card.Img
                       variant="top"
                       src={data.product.file}
